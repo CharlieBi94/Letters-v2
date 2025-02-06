@@ -19,8 +19,10 @@ public class TileDisplay : MonoBehaviour
     [SerializeField]
     float animationTime = 1f;
 
-    RectTransform rect;
+    bool animate = false;
+    float progress = 0f;
 
+    RectTransform rect;
     private void Start()
     {
         rect = GetComponent<RectTransform>();
@@ -44,11 +46,31 @@ public class TileDisplay : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (animate)
+        {
+            LayoutElement layout = GetComponent<LayoutElement>();
+            layout.ignoreLayout = true; // this is a hack to update the GUI
+            progress += Time.deltaTime;
+            float val = SimpleTween.LinearTween(0f, 1f, animationTime, progress);
+            rect.localScale = new Vector3(val, val, val);
+            layout.ignoreLayout = false;
+            if (progress >= animationTime)
+            {
+                rect.localScale = Vector3.one;
+                animate = false;
+            }
+        }
+    }
+
     private void OnTileSpawn()
     {
-        print("Starting resize");
-        StopAllCoroutines();
-        StartCoroutine(SpawnAnimation());
+        //print("Starting resize");
+        animate = true;
+        progress = 0f;
+        //StopAllCoroutines();
+        //StartCoroutine(SpawnAnimation());
     }
 
     IEnumerator SpawnAnimation()

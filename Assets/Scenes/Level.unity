@@ -1794,6 +1794,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3144077361488595884, guid: 63eb429fe07b903498e5e2a0812d9855, type: 3}
   m_PrefabInstance: {fileID: 1472825159390262104}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1180672434 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7235719679607965653, guid: 63eb429fe07b903498e5e2a0812d9855, type: 3}
+  m_PrefabInstance: {fileID: 1472825159390262104}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec084c7c595be334c9923c307252cd9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1259029468
 GameObject:
   m_ObjectHideFlags: 0
@@ -2161,7 +2172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LETTER_INTERVAL: 4
   LEVELUP_INTERVAL: 5
-  playArea: {fileID: 2009738160}
+  playArea: {fileID: 1180672434}
   timerData: {fileID: 340119464}
   minute: 3
   second: 30
@@ -2220,6 +2231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af957d5f2ab937a4390e42fa51cf576d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playArea: {fileID: 1180672434}
   canvas: {fileID: 1996252014}
   mainCamera: {fileID: 519420031}
 --- !u!114 &1322059920
@@ -3130,17 +3142,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &2009738160 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7235719679607965653, guid: 63eb429fe07b903498e5e2a0812d9855, type: 3}
-  m_PrefabInstance: {fileID: 1472825159390262104}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec084c7c595be334c9923c307252cd9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2059388938
 GameObject:
   m_ObjectHideFlags: 0

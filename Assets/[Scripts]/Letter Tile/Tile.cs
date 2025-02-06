@@ -52,6 +52,11 @@ public class Tile : MonoBehaviour, IUICollider, IDragHandler, IBeginDragHandler,
         if (state == currentState) return;
     }
 
+    public TileState GetCurrentState()
+    {
+        return currentState;
+    }
+
     public void SetPlayerAdded(bool added)
     {
         playerAdded = added;

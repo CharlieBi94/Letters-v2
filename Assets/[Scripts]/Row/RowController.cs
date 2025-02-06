@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Class that represents a row in the play area
@@ -15,10 +17,11 @@ public class RowController : MonoBehaviour, IUICollider
     RectTransform tilesContainer;
     string word;
     public event Action SizeChanged;
-
+    RectTransform rect;
     private void Start()
     {
         word = string.Empty;
+        rect = GetComponent<RectTransform>();
         InventoryInputHandler.Instance.LetterAdded += OnLetterAdded;
     }
 
@@ -33,17 +36,30 @@ public class RowController : MonoBehaviour, IUICollider
     /// <param name="position"></param>
     /// <param name="letter"></param>
     /// <param name="playerAdded"></param>
-    public void AddLetter(int position, char letter, bool playerAdded=true)
+    public Tile AddLetter(int position, char letter, bool playerAdded=true)
     {
+        Tile tile;
         if(position < tiles.Count)
         {
-            SpawnLetter(playerAdded, letter, position);
+            tile = SpawnLetter(playerAdded, letter, position);
         }
         else
         {
-            SpawnLetter(playerAdded, letter, tiles.Count);
+            tile = SpawnLetter(playerAdded, letter, tiles.Count);
         }
         tiles = tilesContainer.GetComponentsInChildren<Tile>().ToList();
+        return tile;
+    }
+
+    public Tile AddLetter(Tile tile, int position, bool playerAdded = true)
+    {
+        GameObject tileObj = tile.gameObject;
+        tileObj.transform.SetParent(tilesContainer, false);
+        if(position > tiles.Count) position = tiles.Count;
+        tileObj.transform.SetSiblingIndex(position);
+        tile.gameObject.GetComponent<LayoutElement>().ignoreLayout = false;
+        tile.StartSpawnAnimation();
+        return tile;
     }
 
     private void OnLetterAdded(RowController row, bool countMoves)
@@ -80,6 +96,7 @@ public class RowController : MonoBehaviour, IUICollider
 
     /// <summary>
     /// Gets the position of the letter tile in the hierarchy
+    /// the positional index 
     /// </summary>
     /// <param name="letter"></param>
     /// <returns>-1 if unable to find letter</returns>
@@ -101,5 +118,21 @@ public class RowController : MonoBehaviour, IUICollider
     public void RemoveTile(Tile t)
     {
         tiles.Remove(t);
+    }
+
+    public List<Tile> GetAllTiles()
+    {
+        return tilesContainer.GetComponentsInChildren<Tile>().ToList();
+    }
+
+    public int Count(Tile tile)
+    {
+        tiles = tilesContainer.GetComponentsInChildren<Tile>().ToList();
+        int ans = 0;
+        foreach(Tile t in tiles)
+        {
+            if(t != tile) ans++;
+        }
+        return ans;
     }
 }

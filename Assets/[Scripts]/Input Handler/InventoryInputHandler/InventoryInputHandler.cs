@@ -8,6 +8,9 @@ using UnityEngine.UI;
 /// </summary>
 public class InventoryInputHandler : Singleton<InventoryInputHandler>
 {
+    [SerializeField]
+    PlayAreaController playArea;
+
     // Events
     public Action<RowController, bool> LetterAdded;
 
@@ -17,8 +20,8 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
     private LayoutElement layout;
     private bool canPlaceMiddle;
 
-    // Remembers the tile that was found before 
-    private RectTransform prevRowRect = null;
+    // Remembers row rect of last frame
+    RowController prevRow;
 
     // Remembers the tile position
     RowController tileOriginalParent;
@@ -50,49 +53,45 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
         // don't do anything unless there is a gameobject populated
         if (tile == null) { return; }
 
+        RowController targetRow;
+        int targetIndex;
+
         // First try to find tile as Target
         Collider2D collider = GetNearestCollider(1 << 6);
         if(collider != null)
         {
-            RowController targetRow = collider.gameObject.GetComponentInParent<RowController>();
-            Tile targetTile = collider.gameObject.GetComponent<Tile>();
+            targetRow = collider.gameObject.GetComponentInParent<RowController>();            
             // Regardless of where we are going to position it, we need to get the parent rect
             RectTransform rowRect = targetRow.gameObject.GetComponent<RectTransform>();
-            // Set tile as a child to the row
-            tile.transform.SetParent(targetRow.GetContainer(), false);
-            // Make sure it is now following layout rules
-            if (layout != null) { layout.ignoreLayout = false; }
+
             // Check to see if we care about placing things between tiles in the row
             if (canPlaceMiddle)
             {
+                Tile targetTile = collider.gameObject.GetComponent<Tile>();
                 // If we need to set a specific position, then we need to find the index of target tile
-                int positionIndex = targetRow.GetPositionIndex(targetTile);
+                targetIndex = targetRow.GetPositionIndex(targetTile);
                 
                 // Check to see if mouse is left or right of the target tile
                 if (!IsLeft(collider.gameObject.GetComponent<RectTransform>()))
                 {
                     // Need to add 1 to the position if we want to place it to the right
-                    positionIndex++;
+                    targetIndex++;
                 }
-                tile.transform.SetSiblingIndex(positionIndex);
-                // Remember the row we are placing this tile on, so that when the position updates, mouse will hover over an 'empty' tile
-                // Later, we use this to prevent flickering of tile position
-                prevRowRect = rowRect;
             }
             else
             {
                 // Check to see if mouse is left or right of the center of the row (parent)
                 if (IsLeft(rowRect))
                 {
-                    tile.transform.SetAsFirstSibling();
+                    targetIndex = 0;
                 }
                 else
                 {
-                    tile.transform.SetAsLastSibling();
+                    targetIndex = targetRow.Count(tile.GetComponent<Tile>());
                 }
             }
-            
-            // If we found a tile, then no need to do any further work
+            prevRow = targetRow;
+            playArea.AddTile(new(tile.GetComponent<Tile>(), targetRow, targetIndex));
             return;
         }
 
@@ -100,26 +99,30 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
         collider = GetNearestCollider(1 << 7);
         if (collider != null)
         {
+            targetRow = collider.GetComponent<RowController>();
+            if(targetRow == prevRow)
+            {
+                return;
+            }
             RectTransform rowRect = collider.GetComponent<RectTransform>();
             // If we found a row, then first check if the row is the same as last time we tried to position tile
-            if (rowRect == prevRowRect) return;
             if (layout != null) { layout.ignoreLayout = false; }
-            tile.transform.SetParent(collider.GetComponent<RowController>().GetContainer(), false);
             // Determine if we should place the tile to the left or right
             if (IsLeft(rowRect))
             {
-                tile.transform.SetAsFirstSibling();
+                targetIndex = 0;
             }
             else
             {
-                tile.transform.SetAsLastSibling();
+                targetIndex = targetRow.Count(tile.GetComponent<Tile>());
             }
-            prevRowRect = rowRect;
+            
+            playArea.AddTile(new(tile.GetComponent<Tile>(), targetRow, targetIndex));
+            return;
         }
         // If we can't find a row or a tile, then make the tile follow the mouse
         else
         {
-            prevRowRect = null;
             PlaceAtMouse();
         }
     }
@@ -210,14 +213,14 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
                 {
                     LetterAdded(parentRow, true);
                 }
-                tile.GetComponent<Tile>().StartSpawnAnimation();
+                //tile.GetComponent<Tile>().StartSpawnAnimation();
             }
             else if (tileOriginalParent != null)
             {
                 tile.transform.SetParent(tileOriginalParent.GetContainer(), false);
                 tile.transform.SetSiblingIndex(tileOriginalIndex);
                 tile.GetComponent<Tile>().SetState(Tile.TileState.IN_PLAY);
-                tile.GetComponent<Tile>().StartSpawnAnimation();
+                //tile.GetComponent<Tile>().StartSpawnAnimation();
                 tile.layer = 6;
                 layout.ignoreLayout = false;
                 // Reset these fields after reverting tile back to its original position
@@ -237,6 +240,8 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
             layout = null;
             // resets to default behaviour
             canPlaceMiddle = false;
+            // Stops remembering prev row
+            prevRow = null;
         }
     }
 

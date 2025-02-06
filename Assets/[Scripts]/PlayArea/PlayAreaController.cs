@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Manages the rows in the play area.
@@ -10,17 +11,21 @@ using UnityEngine;
 public class PlayAreaController : MonoBehaviour
 {
     [SerializeField]
-    private int MAX_ROWS;
-    private List<RowController> rows;
+    private int MAX_ROWS;    
     [SerializeField]
     private RectTransform parent;
+
     public Action<string> AnswerSubmitted;
+
+    private List<RowController> rows;
+    private Dictionary<Tile, RowController> tilesDict;
 
     // Count is used for nameing gameobjects for debugging
     private int count = 0;
     private void Start()
     {
         rows = parent.GetComponentsInChildren<RowController>().ToList();
+        tilesDict = new();
         StartCoroutine(Initialize());
     }
 
@@ -40,7 +45,8 @@ public class PlayAreaController : MonoBehaviour
         RowController row = SpawnRow();
         RectTransform parent = row.gameObject.GetComponent<RectTransform>();
         row.gameObject.GetComponent<ConstantResizer>().GrowAnimation();
-        row.AddLetter(0, c, playerAdded);
+        Tile t = row.AddLetter(0, c, playerAdded);
+        tilesDict.Add(t, row);
         row.gameObject.name += count;
         count++;
     }
@@ -59,6 +65,11 @@ public class PlayAreaController : MonoBehaviour
     private void OnAnswerSubmit(RowController row, string word)
     {
         row.gameObject.GetComponent<AnswerInputHandler>().AnswerSubmitted -= OnAnswerSubmit;
+        List<Tile> tiles = row.GetAllTiles();
+        foreach (Tile tile in tiles)
+        {
+            tilesDict.Remove(tile);
+        }
         rows.Remove(row);
         Destroy(row.gameObject);
         AnswerSubmitted?.Invoke(word);
@@ -98,6 +109,7 @@ public class PlayAreaController : MonoBehaviour
             
         }
         rows.Clear();
+        tilesDict.Clear();
         foreach(char c in startingLetters)
         {
             OnSpawnNewRow(c, false);
@@ -107,5 +119,55 @@ public class PlayAreaController : MonoBehaviour
     public int RowCount()
     {
         return rows.Count;
+    }
+
+    /// <summary>
+    /// Add a tile to the specified position
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
+    public void AddTile(TilePosition position)
+    {
+        TilePosition currentPos = GetTilePosition(position.GetTile());
+        // Check to see if current position same as target position
+        // Check to see if currentPos is equal to targetPos
+        //if(currentPos == null)
+        //{
+        //    print($"Current index: -1 Target index: {position.IndexPosition()}");
+        //}
+        //else
+        //{
+        //    print($"Current index: {currentPos.IndexPosition()} Target index: {position.IndexPosition()}");
+        //}
+        if (currentPos == position)
+        {
+            return;
+        }
+        
+        if (tilesDict.ContainsKey(position.GetTile()))
+        {
+            tilesDict[position.GetTile()] = position.GetRow();
+        }
+        else
+        {
+            tilesDict.Add(position.GetTile(), position.GetRow());
+        }
+        RowController row = position.GetRow();
+        position.GetRow().AddLetter(position.GetTile(), position.IndexPosition());
+    }
+
+    /// <summary>
+    /// Tries to find specified tile and returns position data in the form of a TilePosition
+    /// </summary>
+    /// <param name="t"></param>
+    /// <returns>Returns null if tile does not exist in play area</returns>
+    public TilePosition GetTilePosition(Tile t)
+    {
+        if (!tilesDict.ContainsKey(t)) return null;
+        RowController row = tilesDict[t];
+        if (row == null) return null;
+        int index = row.GetPositionIndex(t);
+        if (index == -1) return null;
+        return new TilePosition(t, row, index);
     }
 }
