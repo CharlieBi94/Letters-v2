@@ -51,11 +51,10 @@ public class TileDisplay : MonoBehaviour
         if (animate)
         {
             LayoutElement layout = GetComponent<LayoutElement>();
-            layout.ignoreLayout = true; // this is a hack to update the GUI
             progress += Time.deltaTime;
             float val = SimpleTween.LinearTween(0f, 1f, animationTime, progress);
             rect.localScale = new Vector3(val, val, val);
-            layout.ignoreLayout = false;
+            LayoutRebuilder.MarkLayoutForRebuild(rect);
             if (progress >= animationTime)
             {
                 rect.localScale = Vector3.one;

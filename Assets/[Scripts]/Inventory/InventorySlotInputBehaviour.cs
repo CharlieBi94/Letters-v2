@@ -1,26 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(InventorySlot))]
-public class InventorySlotInputBehaviour : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
+public class InventorySlotInputBehaviour : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     InventorySlot inv;
-
     private void Start()
     {
         inv = GetComponent<InventorySlot>();
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        InventoryInputHandler.Instance.HandleInventoryPointerDown(inv.Content, inv.MiddleLetter);
+
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        InventoryInputHandler.Instance.PlaceTile();
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
     {
         InventoryInputHandler.Instance.HandleInventoryPointerUp();
     }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        InventoryInputHandler.Instance.HandleInventoryPointerDown(inv.Content, inv.MiddleLetter);
-    }
-
 }

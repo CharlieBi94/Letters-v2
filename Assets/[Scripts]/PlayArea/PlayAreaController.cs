@@ -130,20 +130,7 @@ public class PlayAreaController : MonoBehaviour
     {
         TilePosition currentPos = GetTilePosition(position.GetTile());
         // Check to see if current position same as target position
-        // Check to see if currentPos is equal to targetPos
-        //if(currentPos == null)
-        //{
-        //    print($"Current index: -1 Target index: {position.IndexPosition()}");
-        //}
-        //else
-        //{
-        //    print($"Current index: {currentPos.IndexPosition()} Target index: {position.IndexPosition()}");
-        //}
-        if (currentPos == position)
-        {
-            return;
-        }
-        
+        if (currentPos == position) return;       
         if (tilesDict.ContainsKey(position.GetTile()))
         {
             tilesDict[position.GetTile()] = position.GetRow();
@@ -153,7 +140,7 @@ public class PlayAreaController : MonoBehaviour
             tilesDict.Add(position.GetTile(), position.GetRow());
         }
         RowController row = position.GetRow();
-        position.GetRow().AddLetter(position.GetTile(), position.IndexPosition());
+        row.AddLetter(position.GetTile(), position.IndexPosition());
     }
 
     /// <summary>

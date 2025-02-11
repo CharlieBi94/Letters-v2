@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,16 +38,10 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
             canvas = FindFirstObjectByType<Canvas>().GetComponent<RectTransform>();
         }
     }
-
-    private void Update()
-    {
-        PlaceTile();
-    }
-
     /// <summary>
     /// Moves the selected item to a valid location depending on mouse location and board state
     /// </summary>
-    private void PlaceTile()
+    public void PlaceTile()
     {
         // don't do anything unless there is a gameobject populated
         if (tile == null) { return; }
@@ -60,17 +53,14 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
         Collider2D collider = GetNearestCollider(1 << 6);
         if(collider != null)
         {
-            targetRow = collider.gameObject.GetComponentInParent<RowController>();            
-            // Regardless of where we are going to position it, we need to get the parent rect
-            RectTransform rowRect = targetRow.gameObject.GetComponent<RectTransform>();
+            targetRow = collider.gameObject.GetComponentInParent<RowController>();
 
             // Check to see if we care about placing things between tiles in the row
-            if (canPlaceMiddle)
+            if(canPlaceMiddle)
             {
                 Tile targetTile = collider.gameObject.GetComponent<Tile>();
                 // If we need to set a specific position, then we need to find the index of target tile
                 targetIndex = targetRow.GetPositionIndex(targetTile);
-                
                 // Check to see if mouse is left or right of the target tile
                 if (!IsLeft(collider.gameObject.GetComponent<RectTransform>()))
                 {
@@ -80,6 +70,8 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
             }
             else
             {
+                // Regardless of where we are going to position it, we need to get the parent rect
+                RectTransform rowRect = targetRow.gameObject.GetComponent<RectTransform>();
                 // Check to see if mouse is left or right of the center of the row (parent)
                 if (IsLeft(rowRect))
                 {
@@ -91,6 +83,7 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
                 }
             }
             prevRow = targetRow;
+            print($"Target (from tile): {targetRow.gameObject.name}");
             playArea.AddTile(new(tile.GetComponent<Tile>(), targetRow, targetIndex));
             return;
         }
@@ -99,14 +92,11 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
         collider = GetNearestCollider(1 << 7);
         if (collider != null)
         {
+
             targetRow = collider.GetComponent<RowController>();
-            if(targetRow == prevRow)
-            {
-                return;
-            }
-            RectTransform rowRect = collider.GetComponent<RectTransform>();
             // If we found a row, then first check if the row is the same as last time we tried to position tile
-            if (layout != null) { layout.ignoreLayout = false; }
+            if (prevRow == targetRow) return;
+            RectTransform rowRect = collider.GetComponent<RectTransform>();            
             // Determine if we should place the tile to the left or right
             if (IsLeft(rowRect))
             {
@@ -116,29 +106,37 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
             {
                 targetIndex = targetRow.Count(tile.GetComponent<Tile>());
             }
-            
-            playArea.AddTile(new(tile.GetComponent<Tile>(), targetRow, targetIndex));
+            prevRow = targetRow;
+            print($"Target (row): {targetRow.gameObject.name}");
+            playArea.AddTile(new(tile.GetComponent<Tile>(), targetRow, targetIndex));            
             return;
         }
         // If we can't find a row or a tile, then make the tile follow the mouse
         else
         {
+            
+            prevRow = null;
+            print("Placing at mouse");
             PlaceAtMouse();
         }
     }
 
     private void PlaceAtMouse()
     {
+
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvas,
             Input.mousePosition,
             Camera.main,
             out Vector2 pos);
+
         // if setting it to the canvas, ignore the layout and display its preferred size
+        
         tile.transform.SetParent(canvas, false);
+        layout.ignoreLayout = true;
         tile.transform.position = canvas.TransformPoint(pos);
-        if (layout != null) layout.ignoreLayout = true;
-        if (tileRect != null) tileRect.sizeDelta = new Vector2(layout.preferredWidth, layout.preferredHeight);
+        tileRect.sizeDelta = new Vector2(layout.preferredWidth, layout.preferredHeight);
+        print($"Layout ignore: {layout.ignoreLayout}");
     }
 
     private Collider2D GetNearestCollider(int layerMask)
@@ -173,7 +171,6 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
             Camera.main,
             out Vector2 mousePos);
         return mousePos.x < 0;
-        
     }
 
     public void HandleInventoryPointerDown(string content, bool placeMiddle)
@@ -188,7 +185,6 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
         // Populate all the properties of the tile
         tile = TileFactory.Instance.SpawnTile(canvas, true, content[0]);
         PopulateFields(tile, false, placeMiddle);
-        
     }
 
     private void CancelInventoryBehaviour()
@@ -197,7 +193,6 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
         {
             // Check to see if the position is valid by ensuring its parent is the row
             var parentRow = tile.GetComponentInParent<RowController>();
-            
             if(parentRow != null)
             {
                 // If position is valid, lock it in by setting the tile to active
@@ -213,14 +208,12 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
                 {
                     LetterAdded(parentRow, true);
                 }
-                //tile.GetComponent<Tile>().StartSpawnAnimation();
             }
             else if (tileOriginalParent != null)
             {
                 tile.transform.SetParent(tileOriginalParent.GetContainer(), false);
                 tile.transform.SetSiblingIndex(tileOriginalIndex);
                 tile.GetComponent<Tile>().SetState(Tile.TileState.IN_PLAY);
-                //tile.GetComponent<Tile>().StartSpawnAnimation();
                 tile.layer = 6;
                 layout.ignoreLayout = false;
                 // Reset these fields after reverting tile back to its original position
@@ -231,7 +224,6 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
             {
                 Destroy(tile);
             }
-            
             // removes reference to tile
             tile = null;
             // removes reference to tileRect
@@ -244,7 +236,6 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
             prevRow = null;
         }
     }
-
     public void HandleInventoryPointerUp()
     {
         CancelInventoryBehaviour();
@@ -252,17 +243,16 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
     }
 
     /// <summary>
-    /// Tries to move the tile
+    /// Tries to move the target tile
     /// </summary>
-    /// <param name="t"></param>
+    /// <param name="t">Target tile</param>
     /// <returns>True if able to move, else False</returns>
     public bool HandleTilePointerDown(Tile t)
     {
         // Can only move tiles in GOD-MODE
         if (GameManager.Instance.CurrentState != GameManager.GameState.GOD_MODE) return false;
         // Cannot move system placed tiles
-        if (!t.playerAdded) return false;
-        
+        if (!t.playerAdded) return false;        
         tile = t.gameObject;
         // You can always place the tile anywhere
         PopulateFields(t.gameObject, true, true);
@@ -293,9 +283,7 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
         }
         // Sets the phantom tile to default layer so it isn't being detected by raycast
         tile.layer = 0;
-        
     }
-    
     public void HandleTilePointerUp()
     {
         CancelInventoryBehaviour();
