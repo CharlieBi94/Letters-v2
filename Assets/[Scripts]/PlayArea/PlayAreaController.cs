@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class PlayAreaController : MonoBehaviour
 {
     [SerializeField]
-    private int MAX_ROWS;    
+    public int MAX_ROWS;    
     [SerializeField]
     private RectTransform parent;
 
@@ -59,6 +59,11 @@ public class PlayAreaController : MonoBehaviour
         ansHandler.AnswerSubmitted += OnAnswerSubmit;
         rows.Insert(0, row);
         rowObj.transform.SetAsLastSibling();
+        // Check if we we are at max rows
+        if (rows.Count > MAX_ROWS)
+        {
+            GameManager.Instance.TrySetGameState(GameManager.GameState.LOST);
+        }
         return row;
     }
 

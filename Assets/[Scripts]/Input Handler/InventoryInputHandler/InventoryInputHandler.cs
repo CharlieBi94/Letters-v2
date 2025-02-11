@@ -83,7 +83,6 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
                 }
             }
             prevRow = targetRow;
-            print($"Target (from tile): {targetRow.gameObject.name}");
             playArea.AddTile(new(tile.GetComponent<Tile>(), targetRow, targetIndex));
             return;
         }
@@ -107,7 +106,6 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
                 targetIndex = targetRow.Count(tile.GetComponent<Tile>());
             }
             prevRow = targetRow;
-            print($"Target (row): {targetRow.gameObject.name}");
             playArea.AddTile(new(tile.GetComponent<Tile>(), targetRow, targetIndex));            
             return;
         }
@@ -116,7 +114,6 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
         {
             
             prevRow = null;
-            print("Placing at mouse");
             PlaceAtMouse();
         }
     }
@@ -135,8 +132,7 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
         tile.transform.SetParent(canvas, false);
         layout.ignoreLayout = true;
         tile.transform.position = canvas.TransformPoint(pos);
-        tileRect.sizeDelta = new Vector2(layout.preferredWidth, layout.preferredHeight);
-        print($"Layout ignore: {layout.ignoreLayout}");
+        tileRect.sizeDelta = new Vector2(layout.preferredWidth, layout.preferredHeight);    
     }
 
     private Collider2D GetNearestCollider(int layerMask)

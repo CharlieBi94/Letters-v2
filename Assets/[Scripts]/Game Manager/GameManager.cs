@@ -73,10 +73,6 @@ public class GameManager : Singleton<GameManager>
         if (playerMovesCount % LETTER_INTERVAL == 0)
         {
             SpawnNewRow?.Invoke(LetterUtility.GenerateLetter(), false);
-            if(playArea.RowCount() > 7)
-            {
-                TrySetGameState(GameState.LOST);
-            }
         }
         
         if (playerMovesCount % LEVELUP_INTERVAL == 0)
@@ -137,10 +133,15 @@ public class GameManager : Singleton<GameManager>
     public GameState TrySetGameState(GameState state)
     {
         if (state == CurrentState) return CurrentState;
+        // If already game over, we cannot change to levelup
+        if(state == GameState.LEVEL_UP)
+        {
+            if (CurrentState == GameState.LOST) return CurrentState;
+        }
         // Cannot move from swapping to paused
         if(CurrentState == GameState.LEVEL_UP)
         {
-            if (state == GameState.PAUSED) { return CurrentState; }
+            if (state == GameState.PAUSED) return CurrentState;
         }
         if(state == GameState.LOST)
         {
@@ -165,7 +166,7 @@ public class GameManager : Singleton<GameManager>
     private bool IsGameOver()
     {
         bool isGameOver = false;
-        if (playArea.RowCount() > 7)
+        if (playArea.RowCount() > playArea.MAX_ROWS)
         {
             isGameOver = true;
         }
