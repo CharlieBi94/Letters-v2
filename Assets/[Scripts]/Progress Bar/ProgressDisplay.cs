@@ -9,6 +9,7 @@ public class ProgressDisplay : MonoBehaviour
     [SerializeField]
     RectTransform progressBar;
 
+    Queue<float> progressQueue = new();
     private float startingValue;
     private float targetValue;
     bool animate = false;
@@ -18,7 +19,6 @@ public class ProgressDisplay : MonoBehaviour
     {
         value = Mathf.Clamp01(value);
         progressBar.localScale = new Vector3(value, progressBar.localScale.y, progressBar.localScale.z);
-        SetValue(0);
     }
 
     private void Update()
@@ -29,11 +29,24 @@ public class ProgressDisplay : MonoBehaviour
             progressBar.localScale = new Vector3( value,
                 progressBar.localScale.y,
                 progressBar.localScale.z);
-            t += 0.7f * Time.deltaTime;
+            t += 1.2f * Time.deltaTime;
             if (t > 1.0f)
             {
                 t = 0.0f;
-                animate = false;
+                
+                value = targetValue;
+                progressBar.localScale = new Vector3(value,
+                progressBar.localScale.y,
+                progressBar.localScale.z);
+                if (progressQueue.Count > 0)
+                {
+                    startingValue = value;
+                    targetValue = progressQueue.Dequeue();
+                }
+                else
+                {
+                    animate = false;
+                }
                 return;
             }
         }
@@ -41,8 +54,21 @@ public class ProgressDisplay : MonoBehaviour
 
     public void SetValue(float amount)
     {
-        targetValue = Mathf.Clamp01(amount);
-        startingValue = value;
-        animate = true;
+        if(animate == true)
+        {
+            progressQueue.Enqueue(amount);
+        }
+        else
+        {
+            targetValue = Mathf.Clamp01(amount);
+            startingValue = value;
+            animate = true;
+        }
+        
+    }
+
+    public float GetValue()
+    {
+        return value;
     }
 }

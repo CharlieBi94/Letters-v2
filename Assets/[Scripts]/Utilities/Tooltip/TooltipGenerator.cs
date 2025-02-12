@@ -14,6 +14,10 @@ public static class TooltipGenerator {
         {
             return $"Gain the ability to move all player added tiles on the field for 15 seconds.";
         }
+        if(c == '?')
+        {
+            return $"Allows you to choose the starting letter for your empty rows.";
+        }
         string tooltip = $"Swap a ";
         if (LetterUtility.IsVowel(c))
         {

@@ -135,4 +135,10 @@ public class RowController : MonoBehaviour, IUICollider
         }
         return ans;
     }
+
+    public int TileCount()
+    {
+        tiles = tilesContainer.GetComponentsInChildren<Tile>().ToList();
+        return tiles.Count;
+    }
 }

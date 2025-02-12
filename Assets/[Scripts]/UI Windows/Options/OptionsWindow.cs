@@ -24,7 +24,10 @@ public class OptionsWindow : MonoBehaviour
     [SerializeField]
     int God_Mode_Weighting;
 
-    public enum OPTION_TYPE { SWAP, MIDDLE_PLACEMENT, SWAP_CONFIRM, MIDDLE_UPGRADE_CONFIRM, GOD_MODE}
+    [SerializeField]
+    int Wild_Card_Weighting;
+
+    public enum OPTION_TYPE { SWAP, MIDDLE_PLACEMENT, SWAP_CONFIRM, MIDDLE_UPGRADE_CONFIRM, GOD_MODE, WILD_CARD, WILD_CARD_OPTIONS}
 
     // Start is called before the first frame update
     void Start()
@@ -58,6 +61,9 @@ public class OptionsWindow : MonoBehaviour
         // God mode can only appear once as an option
         bool godModeUpgraded = false;
 
+        // Wildcard can only appear once
+        bool wildCardUpgraded = false;
+
         // Setup inventory to ensure that we are not giving player a letter they already have
         List<char> used = InventoryManager.Instance.GetLetterContents();
         List<char> data = new();
@@ -65,7 +71,7 @@ public class OptionsWindow : MonoBehaviour
 
         for (int i = 0; i < optionsNumber; i++)
         {
-            OPTION_TYPE type = GenerateOptionType(middleUpgraded, godModeUpgraded);
+            OPTION_TYPE type = GenerateOptionType(middleUpgraded, godModeUpgraded, wildCardUpgraded);
             if (type == OPTION_TYPE.SWAP)
             {
                 char c = LetterUtility.GenerateUniqueLetter(used);
@@ -84,28 +90,41 @@ public class OptionsWindow : MonoBehaviour
                 data.Add('*');
                 upgradeType.Add(OPTION_TYPE.GOD_MODE);
                 godModeUpgraded = true;
+            }else if (type == OPTION_TYPE.WILD_CARD)
+            {
+                data.Add('?');
+                upgradeType.Add(OPTION_TYPE.WILD_CARD);
+                wildCardUpgraded = true;
             }
         }
         swapGenerator.PopulateOptions(data, upgradeType);
 
     }
 
-    private OPTION_TYPE GenerateOptionType(bool middleUpgradeGenerated, bool godOptionGenerated)
+    private OPTION_TYPE GenerateOptionType(bool middleUpgradeGenerated, bool godOptionGenerated, bool wildCardGenerated)
     {
         if (!middleUpgradeGenerated)
         {
             int rand = Random.Range(0, 101);
-            if (rand < Middle_Upgrade_Weighting)
+            if (rand <= Middle_Upgrade_Weighting)
             {
                 return OPTION_TYPE.MIDDLE_PLACEMENT;
             }
         }
-        else if (!godOptionGenerated)
+        if (!godOptionGenerated)
         {
             int rand = Random.Range(0, 101);
-            if(rand < God_Mode_Weighting)
+            if (rand <= God_Mode_Weighting)
             {
                 return OPTION_TYPE.GOD_MODE;
+            }
+        }
+        if (!wildCardGenerated)
+        {
+            int rand = Random.Range(0, 101);
+            if (rand <= Wild_Card_Weighting)
+            {
+                return OPTION_TYPE.WILD_CARD;
             }
         }
         return OPTION_TYPE.SWAP;

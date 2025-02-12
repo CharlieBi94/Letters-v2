@@ -98,6 +98,9 @@ public class OptionsGenerator : MonoBehaviour
                 }else if (optionType[i] == GOD_MODE)
                 {
                     optionButton.onClick.AddListener(behaviour.HandleGodModeSelect);
+                }else if (optionType[i] == WILD_CARD)
+                {
+                    optionButton.onClick.AddListener(behaviour.HandleWildCardSelect);
                 }
             }
             else

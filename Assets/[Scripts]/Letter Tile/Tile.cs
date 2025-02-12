@@ -113,4 +113,9 @@ public class Tile : MonoBehaviour, IUICollider, IDragHandler, IBeginDragHandler,
         Spawned?.Invoke();
     }
 
+    public void HandleWildCardSelect(GameObject selectionScreen)
+    {
+
+    }
+
 }

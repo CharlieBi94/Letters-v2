@@ -24,8 +24,11 @@ public class GameManager : Singleton<GameManager>
     public Action BeginLevelup;
     private int playerMovesCount = 0;
     public Action<GameState> GameStateChanged;
+    public Action<char> NextLetterChanged;
+    public Action<int, int> LevelupMovesChanged;
     public enum GameState { PAUSED, IN_PLAY, LEVEL_UP, LOST, GOD_MODE }
     public GameState CurrentState { get; private set; } = GameState.IN_PLAY;
+    private char nextLetter;
 
     private void Start()
     {
@@ -39,6 +42,8 @@ public class GameManager : Singleton<GameManager>
             Debug.Log("LetterSpriteLoader is not initalized");
         }
         playArea.AnswerSubmitted += OnAnswerSubmitted;
+        nextLetter = GenerateNextLetter();
+        NextLetterChanged?.Invoke(nextLetter);
         TrySetGameState(GameState.IN_PLAY);
         timerData.StartTimer(minute, second);
         timerData.TimeUp += OnTimeUp;
@@ -49,6 +54,11 @@ public class GameManager : Singleton<GameManager>
                 godEffect.SetActive(false);
             }
         }
+    }
+
+    private char GenerateNextLetter()
+    {
+        return LetterUtility.GenerateLetter();
     }
 
     private void OnTimeUp()
@@ -69,10 +79,13 @@ public class GameManager : Singleton<GameManager>
     {
         if (CurrentState == GameState.GOD_MODE) return;
         playerMovesCount++;
+        LevelupMovesChanged?.Invoke(playerMovesCount, LEVELUP_INTERVAL);
 
         if (playerMovesCount % LETTER_INTERVAL == 0)
         {
-            SpawnNewRow?.Invoke(LetterUtility.GenerateLetter(), false);
+            SpawnNewRow?.Invoke(nextLetter, false);
+            nextLetter = GenerateNextLetter();
+            NextLetterChanged?.Invoke(nextLetter);
         }
         
         if (playerMovesCount % LEVELUP_INTERVAL == 0)
@@ -80,6 +93,21 @@ public class GameManager : Singleton<GameManager>
             BeginLevelup?.Invoke();
             TrySetGameState(GameState.LEVEL_UP);
         }
+    }
+
+    public int GetCurrentMoves()
+    {
+        return playerMovesCount;
+    }
+
+    public int GetLetterMoves()
+    {
+        return LETTER_INTERVAL;
+    }
+
+    public char GetNextLetter()
+    {
+        return nextLetter;
     }
 
     public void OnAnswerSubmitted(string word)

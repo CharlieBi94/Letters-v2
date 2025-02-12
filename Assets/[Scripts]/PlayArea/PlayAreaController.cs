@@ -162,4 +162,17 @@ public class PlayAreaController : MonoBehaviour
         if (index == -1) return null;
         return new TilePosition(t, row, index);
     }
+
+    public List<RowController> GetEmptyRows()
+    {
+        List<RowController> ans = new();
+        foreach(RowController row in rows)
+        {
+            if(row.TileCount() == 1)
+            {
+                ans.Add(row);
+            }
+        }
+        return ans;
+    }
 }

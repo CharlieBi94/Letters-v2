@@ -15,6 +15,12 @@ public class SwapInputHandler : Singleton<SwapInputHandler>
     [SerializeField]
     RectTransform visibilityButton;
 
+    [SerializeField]
+    WildcardOptions wildCardSelectScreen;
+
+    public PlayAreaController playArea;
+
+
     char newChar;
 
     char oldChar;
@@ -79,6 +85,12 @@ public class SwapInputHandler : Singleton<SwapInputHandler>
         Restart();
     }
 
+    public void CompleteLevelUp()
+    {
+        GameManager.Instance.CompleteLevelup();
+        Restart();
+    }
+
     public void Restart()
     {
         ClearNewChar();
@@ -124,5 +136,8 @@ public class SwapInputHandler : Singleton<SwapInputHandler>
         newChar = '\0';
     }
 
-    
+    public void ShowWildCardOptions(Tile target)
+    {
+        wildCardSelectScreen.ShowOptions(target);
+    }
 }

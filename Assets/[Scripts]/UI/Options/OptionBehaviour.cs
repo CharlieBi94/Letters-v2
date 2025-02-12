@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(OptionData))]
 public class OptionBehaviour : MonoBehaviour
@@ -32,5 +34,21 @@ public class OptionBehaviour : MonoBehaviour
     {
         GameManager.Instance.StartGodMode();
         SwapInputHandler.Instance.Restart();
+    }
+
+    public void HandleWildCardSelect()
+    {
+        //throw new NotImplementedException();
+        // Look for eligible rows
+        List<RowController> eligibleRows = SwapInputHandler.Instance.playArea.GetEmptyRows();
+        foreach(RowController row in eligibleRows)
+        {
+            Tile t = row.GetAllTiles()[0];
+            t.SetChar('?');
+            t.gameObject.GetComponent<Button>().onClick.RemoveAllListeners();
+            t.gameObject.GetComponent<Button>().onClick.AddListener(() => { SwapInputHandler.Instance.ShowWildCardOptions(t); });
+
+        }
+        SwapInputHandler.Instance.CompleteLevelUp();
     }
 }

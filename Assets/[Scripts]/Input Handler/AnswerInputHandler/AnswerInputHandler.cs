@@ -12,7 +12,7 @@ public class AnswerInputHandler : MonoBehaviour, IBeginDragHandler, IEndDragHand
     [SerializeField]
     private readonly int MAX_Y_MOVEMENT = 40;
     [SerializeField]
-    private readonly int MIN_X_MOVEMENT = 50;
+    private readonly int MIN_X_MOVEMENT = 100;
     [SerializeField]
     Scrollbar scrollBar;
     public Action<RowController, string> AnswerSubmitted;
@@ -73,6 +73,7 @@ public class AnswerInputHandler : MonoBehaviour, IBeginDragHandler, IEndDragHand
         // Check if swipe was in the same direction (left to right)
         // also do a sanity check to ensure its a large enough movement
         float deltaX = eventData.position.x - startingPos.x;
+        //print(deltaX);
         return deltaX > MIN_X_MOVEMENT;
     }
 
@@ -90,7 +91,7 @@ public class AnswerInputHandler : MonoBehaviour, IBeginDragHandler, IEndDragHand
         if (deltaY > MAX_Y_MOVEMENT) { return 0; }
         // visually show the minimum movement along x required to submit the answer
         // this equation will mean that they need to move at least half the minimum value before it will start to visually show a bar
-        float deltaX = Mathf.Max((eventData.position.x - startingPos.x - MIN_X_MOVEMENT)/0.5f, 0);
+        float deltaX = Mathf.Max((eventData.position.x - startingPos.x - MIN_X_MOVEMENT), 0);
         float ans = (deltaX / rect.sizeDelta.x);
         return ans;
     }
