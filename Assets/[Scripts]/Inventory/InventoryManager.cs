@@ -56,7 +56,7 @@ public class InventoryManager : Singleton<InventoryManager>
                 constUsed.Add(c);
             }
             c = char.ToLower(c);
-            inv.Initialize(c.ToString(), true);
+            inv.Initialize(c.ToString(), false);
             inventoryContents.Add(c.ToString().ToLower(), inv);
             inv = GetNextEmpty();
         }

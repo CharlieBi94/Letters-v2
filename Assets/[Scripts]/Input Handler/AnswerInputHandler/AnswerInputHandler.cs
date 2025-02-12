@@ -12,17 +12,15 @@ public class AnswerInputHandler : MonoBehaviour, IBeginDragHandler, IEndDragHand
     [SerializeField]
     private readonly int MAX_Y_MOVEMENT = 40;
     [SerializeField]
-    private readonly int MIN_X_MOVEMENT = 100;
+    private readonly int MIN_X_MOVEMENT = 150;
     [SerializeField]
     Scrollbar scrollBar;
     public Action<RowController, string> AnswerSubmitted;
     Vector2 startingPos = Vector2.zero;
     RowController row;
-    RectTransform rect;
     private void Start()
     {
         row = GetComponent<RowController>();
-        rect = GetComponent<RectTransform>();
         scrollBar.gameObject.SetActive(false);
     }
     public void OnBeginDrag(PointerEventData eventData)
@@ -92,7 +90,7 @@ public class AnswerInputHandler : MonoBehaviour, IBeginDragHandler, IEndDragHand
         // visually show the minimum movement along x required to submit the answer
         // this equation will mean that they need to move at least half the minimum value before it will start to visually show a bar
         float deltaX = Mathf.Max((eventData.position.x - startingPos.x - MIN_X_MOVEMENT), 0);
-        float ans = (deltaX / rect.sizeDelta.x);
+        float ans = (deltaX / MIN_X_MOVEMENT);
         return ans;
     }
 

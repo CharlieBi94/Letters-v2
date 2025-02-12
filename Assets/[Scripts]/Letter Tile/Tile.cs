@@ -82,6 +82,10 @@ public class Tile : MonoBehaviour, IUICollider, IDragHandler, IBeginDragHandler,
         {
             ansInput.OnDrag(eventData);
         }
+        else
+        {
+            InventoryInputHandler.Instance.PlaceTile();
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -111,11 +115,6 @@ public class Tile : MonoBehaviour, IUICollider, IDragHandler, IBeginDragHandler,
     public void StartSpawnAnimation()
     {
         Spawned?.Invoke();
-    }
-
-    public void HandleWildCardSelect(GameObject selectionScreen)
-    {
-
     }
 
 }

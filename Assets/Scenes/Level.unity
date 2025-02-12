@@ -1015,7 +1015,7 @@ MonoBehaviour:
   confirmGenerator: {fileID: 15850940}
   optionsNumber: 3
   Middle_Upgrade_Weighting: 12
-  God_Mode_Weighting: 8
+  God_Mode_Weighting: 100
   Wild_Card_Weighting: 10
 --- !u!1 &391172941
 GameObject:
