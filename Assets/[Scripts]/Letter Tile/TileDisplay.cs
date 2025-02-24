@@ -15,8 +15,6 @@ public class TileDisplay : MonoBehaviour
     Color systemAdded;
 
     [SerializeField]
-    float stepSize = 0.1f;
-    [SerializeField]
     float animationTime = 1f;
 
     bool animate = false;
@@ -71,19 +69,4 @@ public class TileDisplay : MonoBehaviour
         //StopAllCoroutines();
         //StartCoroutine(SpawnAnimation());
     }
-
-    IEnumerator SpawnAnimation()
-    {
-        if (rect == null) rect = GetComponent<RectTransform>();
-        float timeElapsed = 0f;
-        while (timeElapsed <= animationTime)
-        {
-            float val = SimpleTween.LinearTween(0f, 1f, animationTime, timeElapsed);
-            rect.localScale = new Vector3(val, val, val);
-            yield return new WaitForSeconds(stepSize);
-            timeElapsed += stepSize;
-        }
-        rect.localScale = Vector3.one;
-    }
-
 }
