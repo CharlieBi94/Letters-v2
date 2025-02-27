@@ -9,7 +9,12 @@ public class Window : MonoBehaviour
     GameObject window;
 
     [SerializeField]
+    AudioClip openWindowClip;
+
+    [SerializeField]
     float animationTime = 1f;
+    [SerializeField]
+    bool startActive = true;
 
     float targetValue;
     float startingValue;
@@ -19,6 +24,11 @@ public class Window : MonoBehaviour
     RectTransform rect;
     float originalSize;
 
+    private void Start()
+    {
+        window.SetActive(startActive);
+    }
+
     public void ShowWindow()
     {
         if(window != null & !window.activeInHierarchy)
@@ -26,6 +36,7 @@ public class Window : MonoBehaviour
             window.SetActive(true);
             if (rect == null) rect = window.GetComponent<RectTransform>();
             GrowAnimation();
+            SoundController.Instance.PlayAudio(openWindowClip);
         }
         
     }

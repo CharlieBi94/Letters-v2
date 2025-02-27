@@ -96,6 +96,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   window: {fileID: 5588241950076945607}
+  openWindowClip: {fileID: 8300000, guid: 67463f2bb0bc16843a274771ec3a44c3, type: 3}
+  animationTime: 1
+  startActive: 1
 --- !u!1 &6840118544195281157
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,6 +27,9 @@ public class OptionsWindow : MonoBehaviour
     [SerializeField]
     int Wild_Card_Weighting;
 
+    [SerializeField]
+    AudioClip windowOpeningAudio;
+
     public enum OPTION_TYPE { SWAP, MIDDLE_PLACEMENT, SWAP_CONFIRM, MIDDLE_UPGRADE_CONFIRM, GOD_MODE, WILD_CARD, WILD_CARD_OPTIONS}
 
     // Start is called before the first frame update
@@ -54,6 +57,7 @@ public class OptionsWindow : MonoBehaviour
     {
         HideWindows();
         optionsWindow.SetActive(true);
+        SoundController.Instance.PlayAudio(windowOpeningAudio);
         // Check to make sure if we should offer the middle placement upgrade
         bool middleUpgraded = false;
         List<InventorySlot> slot = InventoryManager.Instance.GetUpgradeableLetters();

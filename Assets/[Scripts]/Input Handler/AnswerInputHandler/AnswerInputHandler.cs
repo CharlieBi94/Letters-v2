@@ -48,9 +48,11 @@ public class AnswerInputHandler : MonoBehaviour, IBeginDragHandler, IEndDragHand
                 if (word != string.Empty)
                 {
                     AnswerSubmitted?.Invoke(row, word);
+                    VibrationHandler.Instance.Vibrate();
+                    
                 }
             }
-        }        
+        }
         // Reset the starting position for next time
         startingPos = Vector2.zero;
         scrollBar.gameObject.SetActive(false);

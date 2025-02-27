@@ -12,6 +12,8 @@ public class PauseToggle : MonoBehaviour, IUICollider, IPointerClickHandler
     Sprite playIcon;
     [SerializeField]
     Image buttonIconImg;
+    [SerializeField]
+    Window pauseWindow;
 
     public event Action SizeChanged;
 
@@ -34,11 +36,20 @@ public class PauseToggle : MonoBehaviour, IUICollider, IPointerClickHandler
             GameManager.Instance.TrySetGameState(GameManager.GameState.IN_PLAY);
         }
         Display();
+        
     }
 
     private void OnStateChanged(GameManager.GameState gameState)
     {
         Display();
+        if (GameManager.Instance.CurrentState == GameManager.GameState.PAUSED)
+        {
+            pauseWindow.ShowWindow();
+        }
+        else
+        {
+            pauseWindow.CloseWindow();
+        }
     }
 
     private void Display()

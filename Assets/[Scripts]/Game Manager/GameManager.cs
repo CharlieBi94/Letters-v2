@@ -5,9 +5,9 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField]
-    int LETTER_INTERVAL = 1;
+    int STARTING_LETTER_INTERVAL;
     [SerializeField]
-    int LEVELUP_INTERVAL = 1;
+    int LEVELUP_INTERVAL;
     [SerializeField]
     private PlayAreaController playArea;
     [SerializeField]
@@ -29,6 +29,8 @@ public class GameManager : Singleton<GameManager>
     public enum GameState { PAUSED, IN_PLAY, LEVEL_UP, LOST, GOD_MODE }
     public GameState CurrentState { get; private set; } = GameState.IN_PLAY;
     private char nextLetter;
+    private int letter_interval;
+    private int letterSpawnCount;
 
     private void Start()
     {
@@ -41,6 +43,7 @@ public class GameManager : Singleton<GameManager>
         {
             Debug.Log("LetterSpriteLoader is not initalized");
         }
+        letter_interval = STARTING_LETTER_INTERVAL;
         playArea.AnswerSubmitted += OnAnswerSubmitted;
         nextLetter = GenerateNextLetter();
         NextLetterChanged?.Invoke(nextLetter);
@@ -54,6 +57,7 @@ public class GameManager : Singleton<GameManager>
                 godEffect.SetActive(false);
             }
         }
+        
     }
 
     private char GenerateNextLetter()
@@ -81,11 +85,13 @@ public class GameManager : Singleton<GameManager>
         playerMovesCount++;
         LevelupMovesChanged?.Invoke(playerMovesCount, LEVELUP_INTERVAL);
 
-        if (playerMovesCount % LETTER_INTERVAL == 0)
+        if (playerMovesCount % letter_interval == 0)
         {
             SpawnNewRow?.Invoke(nextLetter, false);
             nextLetter = GenerateNextLetter();
             NextLetterChanged?.Invoke(nextLetter);
+            letterSpawnCount++;
+            letter_interval = CalculateNextInterval(letterSpawnCount);
         }
         
         if (playerMovesCount % LEVELUP_INTERVAL == 0)
@@ -102,7 +108,7 @@ public class GameManager : Singleton<GameManager>
 
     public int GetLetterMoves()
     {
-        return LETTER_INTERVAL;
+        return STARTING_LETTER_INTERVAL;
     }
 
     public char GetNextLetter()
@@ -212,5 +218,10 @@ public class GameManager : Singleton<GameManager>
         List<char> startingLetters = new() { LetterUtility.GenerateLetter(), LetterUtility.GenerateLetter() };
         playArea.Restart(startingLetters);
         playerMovesCount = 0;
+    }
+
+    public int CalculateNextInterval(int x)
+    {
+        return Mathf.Clamp((int)(-0.25f * x + STARTING_LETTER_INTERVAL), 2, int.MaxValue);
     }
 }
