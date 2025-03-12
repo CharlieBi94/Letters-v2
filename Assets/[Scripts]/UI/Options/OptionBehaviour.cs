@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(OptionData))]
-public class OptionBehaviour : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
+public class OptionBehaviour : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerDownHandler
 {
     OptionData data;
     RectTransform uiCanvas;
@@ -41,22 +41,13 @@ public class OptionBehaviour : MonoBehaviour, IBeginDragHandler, IEndDragHandler
         SwapInputHandler.Instance.CompleteLevelUp();
     }
 
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         if(IsDraggable())
         {
             // Spawn phantom object
             draggedObject = TileFactory.Instance.SpawnTile(uiCanvas, true, data.content);
-        }
-        else
-        {
-            if(data.content == '?')
-            {
-                HandleWildCardSelect();
-            }else if(data.content == '*')
-            {
-                HandleGodModeSelect();
-            }
         }
     }
 
@@ -115,5 +106,17 @@ public class OptionBehaviour : MonoBehaviour, IBeginDragHandler, IEndDragHandler
         if (data.content == '?') return false;
         if (data.content == '*') return false;
         return true;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (data.content == '?')
+        {
+            HandleWildCardSelect();
+        }
+        else if (data.content == '*')
+        {
+            HandleGodModeSelect();
+        }
     }
 }

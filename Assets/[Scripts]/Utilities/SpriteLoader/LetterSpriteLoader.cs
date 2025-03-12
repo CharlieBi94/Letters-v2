@@ -12,6 +12,7 @@ public class LetterSpriteLoader
     static LetterSpriteLoader()
     {
         LoadSprites();
+        
     }
 
     public static bool IsInitialized()
@@ -28,14 +29,23 @@ public class LetterSpriteLoader
             char c = (char)(i + 97);
             sprites.Add(c, letters[i]);
         }
+        Sprite godModeIcon = (Sprite)Resources.Load("PowerUps/god_mode", typeof(Sprite));
+        sprites.Add('*', godModeIcon);
+        Sprite wildcardIcon = (Sprite)Resources.Load("PowerUps/wildcard_swap", typeof(Sprite));
+        sprites.Add('?', wildcardIcon);
+        Sprite wildcardTile = (Sprite)Resources.Load("PowerUps/wildcard_blank", typeof(Sprite));
+        sprites.Add('>', wildcardTile);
+        Sprite middleUpgradeIcon = (Sprite)Resources.Load("PowerUps/middle", typeof(Sprite));
+        sprites.Add('-', middleUpgradeIcon);
     }
 
     // Returns the sprite that represents the char (case-insensitive)
-    public static Sprite GetSprite(char c)
+    public static Sprite GetSprite(char c, bool isTile = false)
     {
         c = char.ToLower(c);
         if (sprites.ContainsKey(c))
         {
+            if (c == '?' && isTile) return sprites['>'];
             return sprites[c];
         }
         else

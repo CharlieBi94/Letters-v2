@@ -23,7 +23,6 @@ public class GameOverWindow : MonoBehaviour
     {
         if(state == GameManager.GameState.LOST)
         {
-            print("lost");
             visibleContainer.SetActive(true);
         }
         else

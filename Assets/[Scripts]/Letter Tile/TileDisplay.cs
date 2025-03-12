@@ -33,7 +33,7 @@ public class TileDisplay : MonoBehaviour
 
     private void OnTileChange(Tile tile)
     {
-        letterImg.sprite = LetterSpriteLoader.GetSprite(tile.GetChar());
+        letterImg.sprite = LetterSpriteLoader.GetSprite(tile.GetChar(), true);
         if (tile.playerAdded)
         {
             backgroundImg.color = playerAdded;
