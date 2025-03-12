@@ -84,14 +84,9 @@ public class GameManager : Singleton<GameManager>
         if (CurrentState == GameState.GOD_MODE) return;
         playerMovesCount++;
         LevelupMovesChanged?.Invoke(playerMovesCount, LEVELUP_INTERVAL);
-
         if (playerMovesCount % letter_interval == 0)
         {
-            SpawnNewRow?.Invoke(nextLetter, false);
-            nextLetter = GenerateNextLetter();
-            NextLetterChanged?.Invoke(nextLetter);
-            letterSpawnCount++;
-            letter_interval = CalculateNextInterval(letterSpawnCount);
+            SpawnNextLetter();
         }
         
         if (playerMovesCount % LEVELUP_INTERVAL == 0)
@@ -99,6 +94,16 @@ public class GameManager : Singleton<GameManager>
             BeginLevelup?.Invoke();
             TrySetGameState(GameState.LEVEL_UP);
         }
+    }
+
+    public void SpawnNextLetter()
+    {
+        if(CurrentState != GameState.IN_PLAY) return;
+        SpawnNewRow?.Invoke(nextLetter, false);
+        nextLetter = GenerateNextLetter();
+        NextLetterChanged?.Invoke(nextLetter);
+        letterSpawnCount++;
+        letter_interval = CalculateNextInterval(letterSpawnCount);
     }
 
     public int GetCurrentMoves()

@@ -17,6 +17,10 @@ public class InventoryDisplay : MonoBehaviour
     void Start()
     {
         inv = GetComponent<InventorySlot>();
+        // Set the collider to the size of the inventory slot
+        BoxCollider2D box = GetComponent<BoxCollider2D>();
+        RectTransform rect = GetComponent<RectTransform>();
+        box.size = transform.parent.GetComponent<GridLayoutGroup>().cellSize;
         OnContentChanged();
         inv.ContentChanged += OnContentChanged;
     }

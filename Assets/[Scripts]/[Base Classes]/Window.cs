@@ -45,6 +45,7 @@ public class Window : MonoBehaviour
     {
         if(window != null && window.activeInHierarchy)
         {
+            SoundController.Instance.PlayAudio(openWindowClip);
             window.SetActive(false);
             // Won't work right now because window is hidden before animation is complete
             //ShrinkAnimation();

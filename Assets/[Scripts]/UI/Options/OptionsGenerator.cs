@@ -11,6 +11,8 @@ public class OptionsGenerator : MonoBehaviour
     [SerializeField]
     GameObject optionPrefab;
     [SerializeField]
+    RectTransform uiCanvasRect;
+    [SerializeField]
     RectTransform rect;
     [SerializeField]
     TextMeshProUGUI tmp;
@@ -82,26 +84,27 @@ public class OptionsGenerator : MonoBehaviour
                 OptionBehaviour behaviour = options[i].GetComponent<OptionBehaviour>();
                 Button optionButton = options[i].GetComponent<Button>();
                 optionButton.onClick.RemoveAllListeners();
-                if (optionType[i] == SWAP)
-                {
-                    optionButton.onClick.AddListener(behaviour.HandleSwap);
-                }else if (optionType[i] == MIDDLE_PLACEMENT)
-                {
-                    optionButton.onClick.AddListener(behaviour.HandleMiddleUpgrade);
-                }
-                else if (optionType[i] == SWAP_CONFIRM)
-                {
-                    optionButton.onClick.AddListener(behaviour.HandleConfirm);
-                }else if (optionType[i] == MIDDLE_UPGRADE_CONFIRM)
-                {
-                    optionButton.onClick.AddListener(behaviour.HandleMiddleUpgradeConfirm);
-                }else if (optionType[i] == GOD_MODE)
-                {
-                    optionButton.onClick.AddListener(behaviour.HandleGodModeSelect);
-                }else if (optionType[i] == WILD_CARD)
-                {
-                    optionButton.onClick.AddListener(behaviour.HandleWildCardSelect);
-                }
+                behaviour.SetUICanvas(uiCanvasRect);
+                //if (optionType[i] == SWAP)
+                //{
+                //    optionButton.onClick.AddListener(behaviour.HandleSwap);
+                //}else if (optionType[i] == MIDDLE_PLACEMENT)
+                //{
+                //    optionButton.onClick.AddListener(behaviour.HandleMiddleUpgrade);
+                //}
+                //else if (optionType[i] == SWAP_CONFIRM)
+                //{
+                //    optionButton.onClick.AddListener(behaviour.HandleConfirm);
+                //}else if (optionType[i] == MIDDLE_UPGRADE_CONFIRM)
+                //{
+                //    optionButton.onClick.AddListener(behaviour.HandleMiddleUpgradeConfirm);
+                //}else if (optionType[i] == GOD_MODE)
+                //{
+                //    optionButton.onClick.AddListener(behaviour.HandleGodModeSelect);
+                //}else if (optionType[i] == WILD_CARD)
+                //{
+                //    optionButton.onClick.AddListener(behaviour.HandleWildCardSelect);
+                //}
             }
             else
             {

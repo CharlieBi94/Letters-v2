@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PreviewIcon : MonoBehaviour
+public class PreviewIcon : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField]
     Image iconImg;
@@ -25,5 +27,10 @@ public class PreviewIcon : MonoBehaviour
     private void OnNextLevelChanged(char c)
     {
         iconImg.sprite = LetterSpriteLoader.GetSprite(c);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        GameManager.Instance.SpawnNextLetter();
     }
 }
