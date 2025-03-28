@@ -57,7 +57,7 @@ public class OptionsWindow : MonoBehaviour
     {
         HideWindows();
         optionsWindow.SetActive(true);
-        SoundController.Instance.PlayAudio(windowOpeningAudio);
+        SoundController.Instance.PlaySoundEffect(windowOpeningAudio);
         // Check to make sure if we should offer the middle placement upgrade
         bool middleUpgraded = false;
         List<InventorySlot> slot = InventoryManager.Instance.GetUpgradeableLetters();

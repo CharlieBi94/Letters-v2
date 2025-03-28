@@ -73,16 +73,17 @@ public class SwapInputHandler : Singleton<SwapInputHandler>
 
     }
 
-    public void CompleteSwap()
+    public bool CompleteSwap()
     {
         // Check if both letters are populated
-        if(!char.IsLetter(oldChar)) { return; }
-        if (!char.IsLetter(newChar)) { return; }
+        if(!char.IsLetter(oldChar)) { return false; }
+        if (!char.IsLetter(newChar)) { return false; }
         // Check if both characters are of the same type
-        if(LetterUtility.IsVowel(oldChar) != LetterUtility.IsVowel(newChar)) { return; }
+        if(LetterUtility.IsVowel(oldChar) != LetterUtility.IsVowel(newChar)) { return false; }
         InventoryManager.Instance.Swap(oldChar, newChar);
         GameManager.Instance.CompleteLevelup();
         Restart();
+        return true;
     }
 
     public void CompleteLevelUp()
@@ -104,7 +105,8 @@ public class SwapInputHandler : Singleton<SwapInputHandler>
     public void SetNewLetter(char c)
     {
         newChar = c;
-        ShowConfirmScreen?.Invoke(c);
+        // No longer in use because we are implementing drag and drop instead
+        //ShowConfirmScreen?.Invoke(c);
     }
 
     public void SetOldLetter(char c)

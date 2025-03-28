@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -20,6 +21,10 @@ public class GameManager : Singleton<GameManager>
     private TimerData godModeTimer;
     [SerializeField]
     private GameObject godEffect;
+    [SerializeField]
+    private AudioClip godClip;
+    [SerializeField] 
+    private AudioClip gameOverClip;
     public Action<char, bool> SpawnNewRow;
     public Action BeginLevelup;
     private int playerMovesCount = 0;
@@ -148,15 +153,19 @@ public class GameManager : Singleton<GameManager>
     public void StartGodMode()
     {
         godModeTimer.StartTimer(0, 15);
-        print(TrySetGameState(GameState.GOD_MODE));
-        godModeTimer.TimeUp += OnGodModeStopped;
-        godEffect.SetActive(true);
+        if (TrySetGameState(GameState.GOD_MODE) == GameState.GOD_MODE)
+        {
+            godModeTimer.TimeUp += OnGodModeStopped;
+            SoundController.Instance.PlayAudio(godClip);
+            godEffect.SetActive(true);
+        }
     }
 
     public void OnGodModeStopped()
     {
         TrySetGameState(GameState.IN_PLAY);
         godEffect.SetActive(false);
+        SoundController.Instance.PlayAudio(SoundController.Instance.gameClip, true);
     }
 
     public void CompleteLevelup()
@@ -191,14 +200,18 @@ public class GameManager : Singleton<GameManager>
             }
         }
         CurrentState = state;
-        if (state == GameState.IN_PLAY || state == GameState.GOD_MODE)
+        if (state == GameState.IN_PLAY)
         {
             timerData.ResumeTimer();
-        }else if (state == GameState.PAUSED || state == GameState.LEVEL_UP || state == GameState.LOST)
+        }else if (state == GameState.PAUSED || state == GameState.LEVEL_UP || state == GameState.LOST || state == GameState.GOD_MODE)
         {
             timerData.PauseTimer();
         }
         GameStateChanged?.Invoke(CurrentState);
+        if(CurrentState == GameState.LOST)
+        {
+            SoundController.Instance.PlayAudio(gameOverClip);
+        }
         return CurrentState;
     }
 
@@ -208,21 +221,38 @@ public class GameManager : Singleton<GameManager>
         if (playArea.RowCount() > playArea.MAX_ROWS)
         {
             isGameOver = true;
+            Debug.Log($"Game over. row count: {playArea.RowCount()} max row: {playArea.MAX_ROWS}");
         }
         else if (timerData.IsTimeUp())
         {
+            Debug.Log($"Game over. Timer ran out of time.");
             isGameOver = true;
         }
         return isGameOver;
     }
 
+    public string GameOverCause()
+    {
+        if (!IsGameOver()) return "Game is not over";
+        if (playArea.RowCount() > playArea.MAX_ROWS)
+        {
+            return "Exceeded max rows.";
+        }
+        else
+        {
+            return "Ran out of time.";
+        }
+
+    }
+
     public void RestartGame()
     {
-        TrySetGameState(GameState.IN_PLAY);
-        timerData.StartTimer(minute, second);
-        List<char> startingLetters = new() { LetterUtility.GenerateLetter(), LetterUtility.GenerateLetter() };
-        playArea.Restart(startingLetters);
-        playerMovesCount = 0;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        //TrySetGameState(GameState.IN_PLAY);
+        //timerData.StartTimer(minute, second);
+        //List<char> startingLetters = new() { LetterUtility.GenerateLetter(), LetterUtility.GenerateLetter() };
+        //playArea.Restart(startingLetters);
+        //playerMovesCount = 0;
     }
 
     public int CalculateNextInterval(int x)

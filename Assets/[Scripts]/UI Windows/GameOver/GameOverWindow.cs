@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameOverWindow : MonoBehaviour
@@ -8,6 +9,10 @@ public class GameOverWindow : MonoBehaviour
     // Just the gameobject parent of all visible UI elements
     [SerializeField]
     GameObject visibleContainer;
+
+    // For temp debugging
+    [SerializeField]
+    TextMeshProUGUI tmp;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +29,7 @@ public class GameOverWindow : MonoBehaviour
         if(state == GameManager.GameState.LOST)
         {
             visibleContainer.SetActive(true);
+            tmp.text = GameManager.Instance.GameOverCause();
         }
         else
         {

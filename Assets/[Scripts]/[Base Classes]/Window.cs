@@ -36,7 +36,7 @@ public class Window : MonoBehaviour
             window.SetActive(true);
             if (rect == null) rect = window.GetComponent<RectTransform>();
             GrowAnimation();
-            SoundController.Instance.PlayAudio(openWindowClip);
+            SoundController.Instance.PlaySoundEffect(openWindowClip);
         }
         
     }
@@ -45,7 +45,7 @@ public class Window : MonoBehaviour
     {
         if(window != null && window.activeInHierarchy)
         {
-            SoundController.Instance.PlayAudio(openWindowClip);
+            SoundController.Instance.PlaySoundEffect(openWindowClip);
             window.SetActive(false);
             // Won't work right now because window is hidden before animation is complete
             //ShrinkAnimation();

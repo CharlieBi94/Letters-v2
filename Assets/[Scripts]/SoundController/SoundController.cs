@@ -1,10 +1,14 @@
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SoundController : Singleton<SoundController>
 {
 
     [SerializeField]
-    private AudioClip backgroundAudio;
+    public AudioClip menuClip;
+    [SerializeField]
+    public AudioClip gameClip;
 
     private AudioSource audioSource;
     // Start is called before the first frame update
@@ -12,7 +16,20 @@ public class SoundController : Singleton<SoundController>
     {
         DontDestroyOnLoad(gameObject);
         audioSource = GetComponent<AudioSource>();
-        PlayAudio(backgroundAudio, true);
+        SceneManager.sceneLoaded += OnSceneChange;
+        OnSceneChange(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+    }
+
+    private void OnSceneChange(Scene scene, LoadSceneMode arg1)
+    {
+        if(scene.buildIndex == 0)
+        {
+            PlayAudio(menuClip, true);
+        }
+        else
+        {
+            PlayAudio(gameClip, true);
+        }
     }
 
     public float GetVolume()
@@ -38,16 +55,18 @@ public class SoundController : Singleton<SoundController>
 
     public void PlayAudio(AudioClip clip, bool isLooping = false)
     {
-        if (isLooping)
-        {
-            audioSource.clip = clip;
-            audioSource.loop = isLooping;
-            audioSource.Play();
-        }
-        else
-        {
-            audioSource.PlayOneShot(clip);
-        }
+        audioSource.clip = clip;
+        audioSource.loop = isLooping;
+        audioSource.Play();
+    }
 
+    public void PlaySoundEffect(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
+    }
+
+    public AudioClip GetCurrentClip()
+    {
+        return audioSource.clip;
     }
 }

@@ -41,6 +41,13 @@ public class OptionBehaviour : MonoBehaviour, IBeginDragHandler, IEndDragHandler
         SwapInputHandler.Instance.CompleteLevelUp();
     }
 
+    public void HandleLetterSwapSelect(char targetChar, char newChar)
+    {
+        SwapInputHandler.Instance.SetNewLetter(newChar);
+        SwapInputHandler.Instance.SetOldLetter(targetChar);
+        SwapInputHandler.Instance.CompleteSwap();
+    }
+
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -73,15 +80,7 @@ public class OptionBehaviour : MonoBehaviour, IBeginDragHandler, IEndDragHandler
             }
             else
             {
-                bool targetVowel = LetterUtility.IsVowel(slot.Content[0]);
-                bool selectedVowel = LetterUtility.IsVowel(data.content);
-                // Check to make sure they are both of the same type
-                if(targetVowel == selectedVowel)
-                {
-                    slot.ChangeLetter(data.content.ToString());
-                    SwapInputHandler.Instance.CompleteLevelUp();
-                }
-                
+                HandleLetterSwapSelect(slot.Content[0], data.content);
             }
             
         }
