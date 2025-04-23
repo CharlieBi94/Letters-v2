@@ -5,30 +5,16 @@ public class OptionsWindow : MonoBehaviour
 {
     [SerializeField]
     GameObject optionsWindow;
-
     [SerializeField]
     GameObject confirmWindow;
-
     [SerializeField]
     OptionsGenerator swapGenerator;
-
     [SerializeField]
     OptionsGenerator confirmGenerator;
-
-    [SerializeField]
-    int optionsNumber;
-
-    [SerializeField]
-    int Middle_Upgrade_Weighting;
-
-    [SerializeField]
-    int God_Mode_Weighting;
-
-    [SerializeField]
-    int Wild_Card_Weighting;
-
+    int optionsNumber = 3;
     [SerializeField]
     AudioClip windowOpeningAudio;
+    private DifficultySettingsSO difficultySettings;
 
     public enum OPTION_TYPE { SWAP, MIDDLE_PLACEMENT, SWAP_CONFIRM, MIDDLE_UPGRADE_CONFIRM, GOD_MODE, WILD_CARD, WILD_CARD_OPTIONS}
 
@@ -38,6 +24,7 @@ public class OptionsWindow : MonoBehaviour
         HideWindows();
         SwapInputHandler.Instance.ShowNewOptions += ShowNewOptions;
         SwapInputHandler.Instance.ShowConfirmScreen += ShowConfirmOptions;
+        difficultySettings = DifficultyManager.Instance.difficultySettings;
     }
 
     void HideWindows()
@@ -110,7 +97,7 @@ public class OptionsWindow : MonoBehaviour
         if (!middleUpgradeGenerated)
         {
             int rand = Random.Range(0, 101);
-            if (rand <= Middle_Upgrade_Weighting)
+            if (rand <= difficultySettings.middleUpgradeChance)
             {
                 return OPTION_TYPE.MIDDLE_PLACEMENT;
             }
@@ -118,7 +105,7 @@ public class OptionsWindow : MonoBehaviour
         if (!godOptionGenerated)
         {
             int rand = Random.Range(0, 101);
-            if (rand <= God_Mode_Weighting)
+            if (rand <= difficultySettings.godModeUpgradeChance)
             {
                 return OPTION_TYPE.GOD_MODE;
             }
@@ -126,7 +113,7 @@ public class OptionsWindow : MonoBehaviour
         if (!wildCardGenerated)
         {
             int rand = Random.Range(0, 101);
-            if (rand <= Wild_Card_Weighting)
+            if (rand <= difficultySettings.wildCardUpgradeChance)
             {
                 return OPTION_TYPE.WILD_CARD;
             }

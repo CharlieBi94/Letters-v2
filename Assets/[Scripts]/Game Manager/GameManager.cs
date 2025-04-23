@@ -7,22 +7,9 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField]
-    [Tooltip("The game spawns a new row of letters after this amount of moves")]
-    private int BASE_LETTER_INTERVAL;
-    [SerializeField]
-    [Tooltip("The player levels up after this amount of moves")]
-    private int BASE_LEVELUP_INTERVAL;
-    [SerializeField]
-    [Tooltip("Starts spawning double letters after this amount of answers submitted")]
-    private int DOUBLE_LETTER_SPAWN;
-    [SerializeField]
     private PlayAreaController playArea;
     [SerializeField]
     private TimerData timerData;
-    [SerializeField]
-    int minute;
-    [SerializeField]
-    float second;
     [SerializeField]
     private TimerData godModeTimer;
     [SerializeField]
@@ -31,9 +18,6 @@ public class GameManager : Singleton<GameManager>
     private AudioClip godClip;
     [SerializeField] 
     private AudioClip gameOverClip;
-    [SerializeField]
-    [Tooltip("The duration of god mode in seconds")]
-    private float godModeDuration;
     [SerializeField]
     private SimpleAnimator animator;
     public Action<string, bool> SpawnNewRow;
@@ -48,9 +32,10 @@ public class GameManager : Singleton<GameManager>
     private int letter_interval;
     private int letterSpawnCount;
     int wordsSubmitted;
-
+    DifficultySettingsSO difficultySetting;
     private void Start()
     {
+        difficultySetting = DifficultyManager.Instance.difficultySettings;
         wordsSubmitted = 0;
         if (!SpellChecker.IsInitialized())
         {
@@ -61,12 +46,12 @@ public class GameManager : Singleton<GameManager>
         {
             Debug.Log("LetterSpriteLoader is not initalized");
         }
-        letter_interval = BASE_LETTER_INTERVAL;
+        letter_interval = difficultySetting.baseLetterInterval;
         playArea.AnswerSubmitted += OnAnswerSubmitted;
         nextLetter = GenerateNextSubstring();
         NextLetterChanged?.Invoke(nextLetter);
         TrySetGameState(GameState.IN_PLAY);
-        timerData.StartTimer(minute, second);
+        timerData.StartTimer(difficultySetting.minute, difficultySetting.second);
         timerData.TimeUp += OnTimeUp;
         if(CurrentState != GameState.GOD_MODE)
         {
@@ -84,7 +69,7 @@ public class GameManager : Singleton<GameManager>
         spawn += LetterUtility.GenerateLetter();
 
         // Should change formula more as right now it might be a bit jarring
-        if (wordsSubmitted > DOUBLE_LETTER_SPAWN)
+        if (wordsSubmitted > difficultySetting.doubleLetterSpawn)
         {
             spawn += LetterUtility.GenerateLetter();
         }
@@ -109,13 +94,13 @@ public class GameManager : Singleton<GameManager>
     {
         if (CurrentState == GameState.GOD_MODE) return;
         playerMovesCount++;
-        LevelupMovesChanged?.Invoke(playerMovesCount, BASE_LEVELUP_INTERVAL);
+        LevelupMovesChanged?.Invoke(playerMovesCount, difficultySetting.baseLevelupInterval);
         if (playerMovesCount % letter_interval == 0)
         {
             SpawnNextLetter();
         }
         
-        if (playerMovesCount % BASE_LEVELUP_INTERVAL == 0)
+        if (playerMovesCount % difficultySetting.baseLevelupInterval == 0)
         {
             BeginLevelup?.Invoke();
             TrySetGameState(GameState.LEVEL_UP);
@@ -135,11 +120,6 @@ public class GameManager : Singleton<GameManager>
     public int GetCurrentMoves()
     {
         return playerMovesCount;
-    }
-
-    public int GetLetterMoves()
-    {
-        return BASE_LETTER_INTERVAL;
     }
 
     public string GetNextLetter()
@@ -173,7 +153,7 @@ public class GameManager : Singleton<GameManager>
 
     public void StartGodMode()
     {
-        godModeTimer.StartTimer(0, godModeDuration);
+        godModeTimer.StartTimer(0, difficultySetting.godModeDuration);
         if (TrySetGameState(GameState.GOD_MODE) == GameState.GOD_MODE)
         {
             godModeTimer.TimeUp += OnGodModeStopped;
@@ -302,6 +282,6 @@ public class GameManager : Singleton<GameManager>
 
     public int CalculateNextInterval(int x)
     {
-        return Mathf.Clamp((int)(-0.25f * x + BASE_LETTER_INTERVAL), 2, int.MaxValue);
+        return Mathf.Clamp((int)(-0.25f * x + difficultySetting.baseLetterInterval), 2, int.MaxValue);
     }
 }

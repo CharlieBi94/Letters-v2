@@ -815,10 +815,10 @@ RectTransform:
   - {fileID: 276452553}
   m_Father: {fileID: 1259029469}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 147.5, y: -14.55714}
-  m_SizeDelta: {x: 131.66667, y: 29.11428}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &340119463
 MonoBehaviour:
@@ -867,6 +867,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tmpDisplay: {fileID: 276452554}
+--- !u!1 &351680289
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 351680290}
+  - component: {fileID: 351680291}
+  m_Layer: 0
+  m_Name: DifficultyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &351680290
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351680289}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &351680291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351680289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9364abbf0875d19408b4036f3822493a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficultySettings: {fileID: 11400000, guid: 19565c2fef5ad2949b46b41323571a40, type: 2}
 --- !u!1 &362169247
 GameObject:
   m_ObjectHideFlags: 0
@@ -1898,10 +1943,10 @@ RectTransform:
   - {fileID: 2059388939}
   m_Father: {fileID: 1259029469}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 254.16667, y: -14.55714}
-  m_SizeDelta: {x: 81.666664, y: 29.11428}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &444965367
 MonoBehaviour:
@@ -4412,10 +4457,10 @@ RectTransform:
   - {fileID: 633227441}
   m_Father: {fileID: 1259029469}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 40.833332, y: -14.55714}
-  m_SizeDelta: {x: 81.666664, y: 50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1259899250
 MonoBehaviour:
@@ -7401,3 +7446,4 @@ SceneRoots:
   - {fileID: 366791930}
   - {fileID: 1322059917}
   - {fileID: 1135467462}
+  - {fileID: 351680290}
