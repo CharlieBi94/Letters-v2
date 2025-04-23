@@ -29,6 +29,7 @@ public class LetterSpriteLoader
             char c = (char)(i + 97);
             sprites.Add(c, letters[i]);
         }
+        // Loads power up sprites
         Sprite godModeIcon = (Sprite)Resources.Load("PowerUps/god_mode", typeof(Sprite));
         sprites.Add('*', godModeIcon);
         Sprite wildcardIcon = (Sprite)Resources.Load("PowerUps/wildcard_swap", typeof(Sprite));
@@ -37,6 +38,12 @@ public class LetterSpriteLoader
         sprites.Add('>', wildcardTile);
         Sprite middleUpgradeIcon = (Sprite)Resources.Load("PowerUps/middle", typeof(Sprite));
         sprites.Add('-', middleUpgradeIcon);
+        // Loads number sprites
+        var numbers = Resources.LoadAll("NumberSprites", typeof(Sprite)).Cast<Sprite>().ToArray();
+        for(int i = 0; i < numbers.Length; i++)
+        {
+            sprites.Add((char)(48 + i + 1), numbers[i]);
+        }
     }
 
     // Returns the sprite that represents the char (case-insensitive)

@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,11 +7,14 @@ using UnityEngine.UI;
 public class PreviewIcon : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField]
-    Image iconImg;
+    GameObject iconContainer;
+    [SerializeField]
+    Image[] icons;
 
     // Start is called before the first frame update
     void Start()
     {
+        icons = iconContainer.GetComponentsInChildren<Image>(true);
         StartCoroutine(Intialize());
     }
 
@@ -21,12 +22,30 @@ public class PreviewIcon : MonoBehaviour, IPointerClickHandler
     {
         yield return new WaitUntil(() => GameManager.Instance != null);
         GameManager.Instance.NextLetterChanged += OnNextLevelChanged;
-        iconImg.sprite = LetterSpriteLoader.GetSprite(GameManager.Instance.GetNextLetter());
+        OnNextLevelChanged(GameManager.Instance.GetNextLetter());
     }
 
-    private void OnNextLevelChanged(char c)
+    private void OnNextLevelChanged(string s)
     {
-        iconImg.sprite = LetterSpriteLoader.GetSprite(c);
+        int n = s.Length;
+        // For now, we only allow strings of length 1 or 2
+        if (n > 2)
+        {
+            Debug.LogError("Cannot spawn letters greater than 2 in length");
+            return;
+        }
+        for(int i = 0; i < icons.Length; i++)
+        {
+            if(i < n)
+            {
+                icons[i].gameObject.SetActive(true);
+                icons[i].sprite = LetterSpriteLoader.GetSprite(s[i]);
+            }
+            else
+            {
+                icons[i].gameObject.SetActive(false);
+            }
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)

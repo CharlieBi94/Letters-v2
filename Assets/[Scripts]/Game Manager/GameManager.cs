@@ -1,14 +1,20 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField]
-    int STARTING_LETTER_INTERVAL;
+    [Tooltip("The game spawns a new row of letters after this amount of moves")]
+    private int BASE_LETTER_INTERVAL;
     [SerializeField]
-    int LEVELUP_INTERVAL;
+    [Tooltip("The player levels up after this amount of moves")]
+    private int BASE_LEVELUP_INTERVAL;
+    [SerializeField]
+    [Tooltip("Starts spawning double letters after this amount of answers submitted")]
+    private int DOUBLE_LETTER_SPAWN;
     [SerializeField]
     private PlayAreaController playArea;
     [SerializeField]
@@ -25,20 +31,27 @@ public class GameManager : Singleton<GameManager>
     private AudioClip godClip;
     [SerializeField] 
     private AudioClip gameOverClip;
-    public Action<char, bool> SpawnNewRow;
+    [SerializeField]
+    [Tooltip("The duration of god mode in seconds")]
+    private float godModeDuration;
+    [SerializeField]
+    private SimpleAnimator animator;
+    public Action<string, bool> SpawnNewRow;
     public Action BeginLevelup;
     private int playerMovesCount = 0;
     public Action<GameState> GameStateChanged;
-    public Action<char> NextLetterChanged;
+    public Action<string> NextLetterChanged;
     public Action<int, int> LevelupMovesChanged;
     public enum GameState { PAUSED, IN_PLAY, LEVEL_UP, LOST, GOD_MODE }
     public GameState CurrentState { get; private set; } = GameState.IN_PLAY;
-    private char nextLetter;
+    private string nextLetter;
     private int letter_interval;
     private int letterSpawnCount;
+    int wordsSubmitted;
 
     private void Start()
     {
+        wordsSubmitted = 0;
         if (!SpellChecker.IsInitialized())
         {
             Debug.Log("SpellChecker is not initialized");
@@ -48,9 +61,9 @@ public class GameManager : Singleton<GameManager>
         {
             Debug.Log("LetterSpriteLoader is not initalized");
         }
-        letter_interval = STARTING_LETTER_INTERVAL;
+        letter_interval = BASE_LETTER_INTERVAL;
         playArea.AnswerSubmitted += OnAnswerSubmitted;
-        nextLetter = GenerateNextLetter();
+        nextLetter = GenerateNextSubstring();
         NextLetterChanged?.Invoke(nextLetter);
         TrySetGameState(GameState.IN_PLAY);
         timerData.StartTimer(minute, second);
@@ -62,12 +75,20 @@ public class GameManager : Singleton<GameManager>
                 godEffect.SetActive(false);
             }
         }
-        
     }
 
-    private char GenerateNextLetter()
+    private string GenerateNextSubstring()
     {
-        return LetterUtility.GenerateLetter();
+        // Spawn double letter rows after 6 submitted answers
+        string spawn = string.Empty;
+        spawn += LetterUtility.GenerateLetter();
+
+        // Should change formula more as right now it might be a bit jarring
+        if (wordsSubmitted > DOUBLE_LETTER_SPAWN)
+        {
+            spawn += LetterUtility.GenerateLetter();
+        }
+        return spawn;
     }
 
     private void OnTimeUp()
@@ -79,22 +100,22 @@ public class GameManager : Singleton<GameManager>
     /// Should only be called at the beginning of the game to get the starting field state
     /// </summary>
     /// <returns></returns>
-    public char[] GetInitalFieldState()
+    public string[] GetInitalFieldState()
     {
-        return new char[] { LetterUtility.GenerateLetter(), LetterUtility.GenerateLetter()};
+        return new string[] { GenerateNextSubstring(), GenerateNextSubstring()};
     }
 
     public void IncrementMoves()
     {
         if (CurrentState == GameState.GOD_MODE) return;
         playerMovesCount++;
-        LevelupMovesChanged?.Invoke(playerMovesCount, LEVELUP_INTERVAL);
+        LevelupMovesChanged?.Invoke(playerMovesCount, BASE_LEVELUP_INTERVAL);
         if (playerMovesCount % letter_interval == 0)
         {
             SpawnNextLetter();
         }
         
-        if (playerMovesCount % LEVELUP_INTERVAL == 0)
+        if (playerMovesCount % BASE_LEVELUP_INTERVAL == 0)
         {
             BeginLevelup?.Invoke();
             TrySetGameState(GameState.LEVEL_UP);
@@ -103,9 +124,9 @@ public class GameManager : Singleton<GameManager>
 
     public void SpawnNextLetter()
     {
-        if(CurrentState != GameState.IN_PLAY) return;
+        if(CurrentState != GameState.IN_PLAY && CurrentState != GameState.GOD_MODE) return;
         SpawnNewRow?.Invoke(nextLetter, false);
-        nextLetter = GenerateNextLetter();
+        nextLetter = GenerateNextSubstring();
         NextLetterChanged?.Invoke(nextLetter);
         letterSpawnCount++;
         letter_interval = CalculateNextInterval(letterSpawnCount);
@@ -118,10 +139,10 @@ public class GameManager : Singleton<GameManager>
 
     public int GetLetterMoves()
     {
-        return STARTING_LETTER_INTERVAL;
+        return BASE_LETTER_INTERVAL;
     }
 
-    public char GetNextLetter()
+    public string GetNextLetter()
     {
         return nextLetter;
     }
@@ -133,38 +154,62 @@ public class GameManager : Singleton<GameManager>
             ScoreData.Instance.ChangeScore(word.Length);
             timerData.AddTime(0, word.Length * 2f);
             WordBank.Instance.AddWord(word);
+            // for difficulty, we only count words correctly submitted.
+            wordsSubmitted++;
         }
         else
         {
             timerData.RemoveTime(5f);
         }
-
         // Check if play area has no rows, if not spawn one immediately
         // Check for count of one, because we call this before destroying the the row the player submitted
         if (playArea.RowCount() == 0)
         {
-            SpawnNewRow?.Invoke(LetterUtility.GenerateLetter(), false);
+            SpawnNewRow?.Invoke(GetNextLetter(), false);
         }
-
         // For now submitting an answer won't count as a move
         //IncrementMoves();
     }
 
     public void StartGodMode()
     {
-        godModeTimer.StartTimer(0, 15);
+        godModeTimer.StartTimer(0, godModeDuration);
         if (TrySetGameState(GameState.GOD_MODE) == GameState.GOD_MODE)
         {
             godModeTimer.TimeUp += OnGodModeStopped;
+            godModeTimer.TimeChanged += OnGodModeTimerTick;
             SoundController.Instance.PlayAudio(godClip);
             godEffect.SetActive(true);
         }
     }
 
-    public void OnGodModeStopped()
+
+    private void OnGodModeTimerTick()
     {
-        TrySetGameState(GameState.IN_PLAY);
+        // This should only happen once per god mode activation
+        if (godModeTimer.minute == 0 && godModeTimer.second <= 1.6f && godModeTimer.second > 1f)
+        {
+            // Ensure that animation hasn't already been added
+            if (!animator.IsAnimating())
+            {
+                // Pop in the numbers 3, 2, 1 on screen
+                for (int i = 3; i > 0; i--)
+                {
+                    Sprite sprite = LetterSpriteLoader.GetSprite((char)(48 + i));
+                    AnimationData popIn = new(SimpleAnimator.AnimationType.POP_IN, 0.4f, sprite);
+                    animator.QueueAnimation(popIn);
+
+                }
+            }
+        }
+    }
+
+    private void OnGodModeStopped()
+    {
         godEffect.SetActive(false);
+        // If game is over then no need to do anything else.
+        if (CurrentState == GameState.LOST) return;
+        TrySetGameState(GameState.IN_PLAY);
         SoundController.Instance.PlayAudio(SoundController.Instance.gameClip, true);
     }
 
@@ -257,6 +302,6 @@ public class GameManager : Singleton<GameManager>
 
     public int CalculateNextInterval(int x)
     {
-        return Mathf.Clamp((int)(-0.25f * x + STARTING_LETTER_INTERVAL), 2, int.MaxValue);
+        return Mathf.Clamp((int)(-0.25f * x + BASE_LETTER_INTERVAL), 2, int.MaxValue);
     }
 }

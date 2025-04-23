@@ -32,21 +32,24 @@ public class PlayAreaController : MonoBehaviour
     IEnumerator Initialize()
     {
         yield return new WaitUntil(() => GameManager.Instance);
-        char[] letters = GameManager.Instance.GetInitalFieldState();
-        foreach (char c in letters)
+        string[] substrings = GameManager.Instance.GetInitalFieldState();
+        foreach (string s in substrings)
         {
-            OnSpawnNewRow(c, false);
+            OnSpawnNewRow(s, false);
         }
         GameManager.Instance.SpawnNewRow += OnSpawnNewRow;
     }
 
-    public void OnSpawnNewRow(char c, bool playerAdded)
+    public void OnSpawnNewRow(string s, bool playerAdded)
     {
         RowController row = SpawnRow();
         RectTransform parent = row.gameObject.GetComponent<RectTransform>();
         row.gameObject.GetComponent<ConstantResizer>().GrowAnimation();
-        Tile t = row.AddLetter(0, c, playerAdded);
-        tilesDict.Add(t, row);
+        for(int i = 0; i < s.Length; i++)
+        {
+            Tile t = row.AddLetter(-1, s[i], playerAdded);
+            tilesDict.Add(t, row);
+        }        
         row.gameObject.name += count;
         count++;
     }
@@ -102,7 +105,7 @@ public class PlayAreaController : MonoBehaviour
         }
     }
 
-    public void Restart(List<char> startingLetters)
+    public void Restart(List<string> startingSubstring)
     {
         ClearContents();
         foreach(var row in rows)
@@ -115,9 +118,9 @@ public class PlayAreaController : MonoBehaviour
         }
         rows.Clear();
         tilesDict.Clear();
-        foreach(char c in startingLetters)
+        foreach(string s in startingSubstring)
         {
-            OnSpawnNewRow(c, false);
+            OnSpawnNewRow(s, false);
         }
     }
 
