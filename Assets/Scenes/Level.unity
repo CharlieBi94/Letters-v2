@@ -911,7 +911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9364abbf0875d19408b4036f3822493a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficultySettings: {fileID: 11400000, guid: 19565c2fef5ad2949b46b41323571a40, type: 2}
+  difficultySettings: {fileID: 11400000, guid: cf295a2717ea04508b7dae1d114a07d7, type: 2}
 --- !u!1 &362169247
 GameObject:
   m_ObjectHideFlags: 0
@@ -1306,10 +1306,6 @@ MonoBehaviour:
   confirmWindow: {fileID: 15850939}
   swapGenerator: {fileID: 1286562158}
   confirmGenerator: {fileID: 15850940}
-  optionsNumber: 3
-  Middle_Upgrade_Weighting: 12
-  God_Mode_Weighting: 8
-  Wild_Card_Weighting: 10
   windowOpeningAudio: {fileID: 8300000, guid: 67463f2bb0bc16843a274771ec3a44c3, type: 3}
 --- !u!1 &391172941
 GameObject:
@@ -4874,18 +4870,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2b088f5380d1ef49b695eb0d611c2d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BASE_LETTER_INTERVAL: 4
-  BASE_LEVELUP_INTERVAL: 5
-  DOUBLE_LETTER_SPAWN: 3
   playArea: {fileID: 1180672434}
   timerData: {fileID: 340119464}
-  minute: 3
-  second: 30
   godModeTimer: {fileID: 1322059924}
   godEffect: {fileID: 658817779}
   godClip: {fileID: 8300000, guid: 81b03a39ee8aec046b67165371788ab9, type: 3}
   gameOverClip: {fileID: 8300000, guid: 6d44fb052fdf03c49abc3c6694dd63bf, type: 3}
-  godModeDuration: 15
   animator: {fileID: 975070939}
 --- !u!114 &1322059916
 MonoBehaviour:
