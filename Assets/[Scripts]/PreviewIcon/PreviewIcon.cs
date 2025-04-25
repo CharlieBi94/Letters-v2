@@ -7,14 +7,19 @@ using UnityEngine.UI;
 public class PreviewIcon : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField]
+    Image fill;
+    [SerializeField]
     GameObject iconContainer;
     [SerializeField]
     Image[] icons;
+    
+
 
     // Start is called before the first frame update
     void Start()
     {
         icons = iconContainer.GetComponentsInChildren<Image>(true);
+        fill.fillAmount = 0f;
         StartCoroutine(Intialize());
     }
 
@@ -22,6 +27,7 @@ public class PreviewIcon : MonoBehaviour, IPointerClickHandler
     {
         yield return new WaitUntil(() => GameManager.Instance != null);
         GameManager.Instance.NextLetterChanged += OnNextLevelChanged;
+        GameManager.Instance.TimeToNextRowSpawn += OnSpawnTimeChanged;
         OnNextLevelChanged(GameManager.Instance.GetNextLetter());
     }
 
@@ -46,6 +52,12 @@ public class PreviewIcon : MonoBehaviour, IPointerClickHandler
                 icons[i].gameObject.SetActive(false);
             }
         }
+    }
+
+    private void OnSpawnTimeChanged(float percent)
+    {
+        percent = Mathf.Clamp01(percent);
+        fill.fillAmount = percent;
     }
 
     public void OnPointerClick(PointerEventData eventData)

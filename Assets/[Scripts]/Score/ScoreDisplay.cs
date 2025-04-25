@@ -17,11 +17,11 @@ public class ScoreDisplay : MonoBehaviour
 
     private void OnScoreChanged()
     {
-        tmpDisplay.text = ScoreData.Instance.GetScore().ToString();
+        tmpDisplay.text = Mathf.RoundToInt(ScoreData.Instance.GetScore()).ToString();
     }
 
     private void OnEnable()
     {
-        tmpDisplay.text = ScoreData.Instance.GetScore().ToString();
+        tmpDisplay.text = Mathf.RoundToInt(ScoreData.Instance.GetScore()).ToString();
     }
 }

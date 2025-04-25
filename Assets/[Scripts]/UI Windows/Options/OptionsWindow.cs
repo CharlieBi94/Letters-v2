@@ -94,7 +94,9 @@ public class OptionsWindow : MonoBehaviour
 
     private OPTION_TYPE GenerateOptionType(bool middleUpgradeGenerated, bool godOptionGenerated, bool wildCardGenerated)
     {
-        if (!middleUpgradeGenerated)
+        int wordsSubmitted = GameManager.Instance.wordsSubmitted;
+        DifficultySettingsSO settings = DifficultyManager.Instance.difficultySettings;
+        if (!middleUpgradeGenerated && wordsSubmitted >= settings.minMiddleAnsCount)
         {
             int rand = Random.Range(0, 101);
             if (rand <= difficultySettings.middleUpgradeChance)
@@ -102,7 +104,7 @@ public class OptionsWindow : MonoBehaviour
                 return OPTION_TYPE.MIDDLE_PLACEMENT;
             }
         }
-        if (!godOptionGenerated)
+        if (!godOptionGenerated && wordsSubmitted >= settings.minGodModeAnsCount)
         {
             int rand = Random.Range(0, 101);
             if (rand <= difficultySettings.godModeUpgradeChance)
@@ -110,7 +112,7 @@ public class OptionsWindow : MonoBehaviour
                 return OPTION_TYPE.GOD_MODE;
             }
         }
-        if (!wildCardGenerated)
+        if (!wildCardGenerated && wordsSubmitted >= settings.minWildCardAnsCount)
         {
             int rand = Random.Range(0, 101);
             if (rand <= difficultySettings.wildCardUpgradeChance)

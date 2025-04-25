@@ -1,4 +1,13 @@
 Patch Notes
+April 29.1 2025
+- Added tooltips to difficulty settings in inspector
+- Updated row spawning to occur on a timer
+- now generates a guarenteed vowel when spawning a double letter  row
+- Added progress bar to indicated incoming new row spawn
+- Added diminishing returns for submitting the same word
+- Added additional variables for calculating score and time
+- Added variables for god mode count down
+
 April 23.1 2025
 - Added cat animation for spawning letters
 - Fixed bug to allow player to spawn row with click in god mode

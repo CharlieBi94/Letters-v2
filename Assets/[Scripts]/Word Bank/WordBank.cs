@@ -7,12 +7,17 @@ public class WordBank : Singleton<WordBank>
 
     public void AddWord(string word)
     {
-        words.Add(word);
+        words.Add(word.ToLower());
     }
 
     public List<string> GetWordsSubmitted()
     {
         return words;
+    }
+
+    public bool Contains(string word)
+    {
+        return words.Contains(word.ToLower());
     }
 
     public void Reset()

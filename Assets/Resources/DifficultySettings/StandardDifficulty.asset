@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d9d6c94b51aa94f9f8b9887741c092, type: 3}
   m_Name: StandardDifficulty
   m_EditorClassIdentifier: 
-  baseLetterInterval: 4
+  baseRowSpawnInterval: 4
   baseLevelupInterval: 5
   doubleLetterSpawn: 6
   minute: 3
   second: 30
   godModeDuration: 15
   middleUpgradeChance: 12
+  minMiddleAnsCount: 0
   godModeUpgradeChance: 8
+  minGodModeAnsCount: 0
   wildCardUpgradeChance: 10
+  minWildCardAnsCount: 0

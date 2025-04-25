@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ScoreData : Singleton<ScoreData>
 {
-    int score;
+    float score;
     public Action ScoreChanged;
 
 
@@ -12,12 +12,12 @@ public class ScoreData : Singleton<ScoreData>
         score = 0;
     }
 
-    public int GetScore()
+    public float GetScore()
     {
         return score;
     }
 
-    public void ChangeScore(int amount)
+    public void ChangeScore(float amount)
     {
         score += amount;
         ScoreChanged?.Invoke();
