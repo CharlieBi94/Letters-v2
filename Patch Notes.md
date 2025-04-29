@@ -1,5 +1,9 @@
 Patch Notes
-April 29.1 2025
+April 29 2025
+- Added moving background 
+- Started reworking some UI elements
+
+April 24 2025
 - Added tooltips to difficulty settings in inspector
 - Updated row spawning to occur on a timer
 - now generates a guarenteed vowel when spawning a double letter  row
