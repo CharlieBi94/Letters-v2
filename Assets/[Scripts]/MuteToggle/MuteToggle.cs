@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class MuteToggle : MonoBehaviour
 {
-    [SerializeField]
-    bool isMute;
+    private bool isMute;
 
     [SerializeField]
     Sprite unMutedSprite;
@@ -18,8 +17,14 @@ public class MuteToggle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        buttonImg = GetComponent<Image>();
+        if (buttonImg == null) buttonImg = GetComponent<Image>();
+        isMute = SoundController.Instance.GetMute();
         HandleStateChange();
+    }
+
+    private void OnEnable()
+    {
+        Start();
     }
 
     public void ToggleMute()

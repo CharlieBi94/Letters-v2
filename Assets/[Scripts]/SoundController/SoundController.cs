@@ -9,13 +9,12 @@ public class SoundController : Singleton<SoundController>
     public AudioClip menuClip;
     [SerializeField]
     public AudioClip gameClip;
-
+    [SerializeField]
     private AudioSource audioSource;
     // Start is called before the first frame update
     void Start()
     {
         DontDestroyOnLoad(gameObject);
-        audioSource = GetComponent<AudioSource>();
         SceneManager.sceneLoaded += OnSceneChange;
         OnSceneChange(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }

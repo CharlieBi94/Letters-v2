@@ -1,4 +1,9 @@
 Patch Notes
+May 5 2025
+- Added mute button to pause menu
+- Built simple framework for carousel UI
+- Added tutorial to instructions menu
+
 April 29 2025
 - Added moving background 
 - Started reworking some UI elements
@@ -12,7 +17,7 @@ April 24 2025
 - Added additional variables for calculating score and time
 - Added variables for god mode count down
 
-April 23.1 2025
+April 23 2025
 - Added cat animation for spawning letters
 - Fixed bug to allow player to spawn row with click in god mode
 - Fixed bug where ending god mode restarted the game if the game happened to be game over
