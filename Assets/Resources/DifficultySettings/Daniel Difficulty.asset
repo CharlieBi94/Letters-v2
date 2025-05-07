@@ -12,22 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d9d6c94b51aa94f9f8b9887741c092, type: 3}
   m_Name: Daniel Difficulty
   m_EditorClassIdentifier: 
-  baseRowSpawnInterval: 6
-  baseLevelupInterval: 2
-  doubleLetterSpawn: 3
+  baseRowSpawnInterval: 12
+  baseLevelupInterval: 6
+  doubleLetterSpawn: 8
   incorrectTimePenalty: 3
   scoreMultiplier: 1
   scorePenalty: 0.5
-  timeMultiplier: 1
+  timeMultiplier: 2.5
   timePenalty: 0.5
-  minute: 1
-  second: 30
+  minute: 2
+  second: 0
   countdownAnimationDuration: 0.4
   countdownNumber: 4
-  godModeDuration: 10
-  middleUpgradeChance: 5
-  minMiddleAnsCount: 1
+  godModeDuration: 17.6
+  middleUpgradeChance: 15
+  minMiddleAnsCount: 10
   godModeUpgradeChance: 10
-  minGodModeAnsCount: 0
+  minGodModeAnsCount: 6
   wildCardUpgradeChance: 5
   minWildCardAnsCount: 0
