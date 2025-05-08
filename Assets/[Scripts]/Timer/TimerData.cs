@@ -74,6 +74,7 @@ public class TimerData : MonoBehaviour
             second = second % 60;
 
         }
+        TimeChanged?.Invoke();
     }
 
     public void RemoveTime(float sec)

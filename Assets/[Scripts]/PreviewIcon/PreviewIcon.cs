@@ -63,5 +63,6 @@ public class PreviewIcon : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         GameManager.Instance.SpawnNextLetter();
+        OnSpawnTimeChanged(0);
     }
 }
