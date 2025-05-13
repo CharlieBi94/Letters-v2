@@ -73,6 +73,12 @@ public class PlayAreaController : MonoBehaviour
     private void OnAnswerSubmit(RowController row, string word)
     {
         row.gameObject.GetComponent<AnswerInputHandler>().AnswerSubmitted -= OnAnswerSubmit;
+        RemoveRow(row);
+        AnswerSubmitted?.Invoke(word);
+    }
+
+    private void RemoveRow(RowController row)
+    {
         List<Tile> tiles = row.GetAllTiles();
         foreach (Tile tile in tiles)
         {
@@ -80,7 +86,6 @@ public class PlayAreaController : MonoBehaviour
         }
         rows.Remove(row);
         Destroy(row.gameObject);
-        AnswerSubmitted?.Invoke(word);
     }
 
     private void OnDestroy()
@@ -166,16 +171,44 @@ public class PlayAreaController : MonoBehaviour
         return new TilePosition(t, row, index);
     }
 
-    public List<RowController> GetEmptyRows()
+    /// <summary>
+    /// This 
+    /// </summary>
+    /// <returns></returns>
+    public List<RowController> GetSysTileOnlyRows()
     {
         List<RowController> ans = new();
         foreach(RowController row in rows)
         {
-            if(row.TileCount() == 1)
+            bool allSysTiles = true;
+            foreach(Tile t in row.GetAllTiles())
             {
-                ans.Add(row);
+                if (t.playerAdded)
+                {
+                    allSysTiles = false;
+                    break;
+                }
             }
+            if(allSysTiles) ans.Add(row);
         }
         return ans;
     }
+
+    /// <summary>
+    /// Returns all rows that have no tiles in them
+    /// </summary>
+    /// <returns></returns>
+    public void RemoveEmptyRows()
+    {
+        List<RowController> emptyRows = new();
+        foreach(var row in rows)
+        {
+            if (row.GetAllTiles().Count == 0) emptyRows.Add(row);
+        }
+        foreach(var row in emptyRows)
+        {
+            RemoveRow(row);
+        }
+    }
+
 }

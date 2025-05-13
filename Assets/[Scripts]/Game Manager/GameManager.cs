@@ -32,12 +32,12 @@ public class GameManager : Singleton<GameManager>
     public enum GameState { PAUSED, IN_PLAY, LEVEL_UP, LOST, GOD_MODE }
     public GameState CurrentState { get; private set; } = GameState.IN_PLAY;
     private string nextLetter;
-    public int wordsSubmitted;
+    public int correctWordsSubmitted;
     DifficultySettingsSO difficultySetting;
     private void Start()
     {
         difficultySetting = DifficultyManager.Instance.difficultySettings;
-        wordsSubmitted = 0;
+        correctWordsSubmitted = 0;
         if (!SpellChecker.IsInitialized())
         {
             Debug.Log("SpellChecker is not initialized");
@@ -81,16 +81,24 @@ public class GameManager : Singleton<GameManager>
 
     private string GenerateNextSubstring()
     {
-        // Spawn double letter rows after 6 submitted answers
         string spawn = string.Empty;
         List<char> used = new();
-        spawn += LetterUtility.GenerateUniqueConsonant(used);
+        spawn += LetterUtility.GenerateLetter();
 
-        if (wordsSubmitted > difficultySetting.doubleLetterSpawn)
+        if (correctWordsSubmitted < difficultySetting.doubleLetterSpawn) return spawn;
+
+        if (LetterUtility.IsVowel(spawn[0]))
         {
+            spawn += LetterUtility.GenerateLetter();
+        }
+        else
+        {
+            // double consonant spawn protection
             spawn += LetterUtility.GenerateUniqueVowel(used);
         }
+
         return spawn;
+
     }
 
     private void OnTimeUp()
@@ -156,7 +164,7 @@ public class GameManager : Singleton<GameManager>
             timerData.AddTime(0, timeValue * difficultySetting.timeMultiplier);
             WordBank.Instance.AddWord(word);
             // for difficulty, we only count words correctly submitted.
-            wordsSubmitted++;
+            correctWordsSubmitted++;
         }
         else
         {
@@ -210,6 +218,7 @@ public class GameManager : Singleton<GameManager>
     private void OnGodModeStopped()
     {
         godEffect.SetActive(false);
+        playArea.RemoveEmptyRows();
         // If game is over then no need to do anything else.
         if (CurrentState == GameState.LOST) return;
         TrySetGameState(GameState.IN_PLAY);

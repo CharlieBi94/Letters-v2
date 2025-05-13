@@ -94,7 +94,7 @@ public class OptionsWindow : MonoBehaviour
 
     private OPTION_TYPE GenerateOptionType(bool middleUpgradeGenerated, bool godOptionGenerated, bool wildCardGenerated)
     {
-        int wordsSubmitted = GameManager.Instance.wordsSubmitted;
+        int wordsSubmitted = GameManager.Instance.correctWordsSubmitted;
         DifficultySettingsSO settings = DifficultyManager.Instance.difficultySettings;
         if (!middleUpgradeGenerated && wordsSubmitted >= settings.minMiddleAnsCount)
         {
@@ -112,7 +112,7 @@ public class OptionsWindow : MonoBehaviour
                 return OPTION_TYPE.GOD_MODE;
             }
         }
-        if (!wildCardGenerated && wordsSubmitted >= settings.minWildCardAnsCount)
+        if (!wildCardGenerated && wordsSubmitted >= settings.minSoloSysTileCount)
         {
             int rand = Random.Range(0, 101);
             if (rand <= difficultySettings.wildCardUpgradeChance)

@@ -287,8 +287,6 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
     {
         // Can only move tiles in GOD-MODE
         if (GameManager.Instance.CurrentState != GameManager.GameState.GOD_MODE) return false;
-        // Cannot move system placed tiles
-        if (!t.playerAdded) return false;        
         tile = t.gameObject;
         // You can always place the tile anywhere
         PopulateFields(t.gameObject, true, true);

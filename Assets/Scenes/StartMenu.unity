@@ -2569,6 +2569,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Swiping words away gives you more time!
       objectReference: {fileID: 0}
+    - target: {fileID: 7546598506025444242, guid: 14ad64a067f983249a5a33a9f6d4e79d, type: 3}
+      propertyPath: m_margin.z
+      value: 0.29568478
+      objectReference: {fileID: 0}
     - target: {fileID: 8812358956373871215, guid: 14ad64a067f983249a5a33a9f6d4e79d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

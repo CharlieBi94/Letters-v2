@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d9d6c94b51aa94f9f8b9887741c092, type: 3}
   m_Name: Test Difficulty
   m_EditorClassIdentifier: 
-  baseRowSpawnInterval: 10
+  baseRowSpawnInterval: 330
   baseLevelupInterval: 2
   doubleLetterSpawn: 0
   incorrectTimePenalty: 0
@@ -30,4 +30,4 @@ MonoBehaviour:
   godModeUpgradeChance: 100
   minGodModeAnsCount: 0
   wildCardUpgradeChance: 10
-  minWildCardAnsCount: 0
+  minSoloSysTileCount: 0

@@ -45,6 +45,6 @@ public class DifficultySettingsSO : ScriptableObject
     public int minGodModeAnsCount;
     [Tooltip("% chance of getting the wild card upgrade.")]
     public int wildCardUpgradeChance;
-    [Tooltip("Number of correct answers before spawning wild card.")]
-    public int minWildCardAnsCount;
+    [Tooltip("Number of valid tiles before spawning wild card.")]
+    public int minSoloSysTileCount;
 }

@@ -29,7 +29,7 @@ public class OptionBehaviour : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     {
         //throw new NotImplementedException();
         // Look for eligible rows
-        List<RowController> eligibleRows = SwapInputHandler.Instance.playArea.GetEmptyRows();
+        List<RowController> eligibleRows = SwapInputHandler.Instance.playArea.GetSysTileOnlyRows();
         foreach(RowController row in eligibleRows)
         {
             Tile t = row.GetAllTiles()[0];

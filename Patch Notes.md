@@ -1,4 +1,11 @@
 Patch Notes
+May 12 2025
+- Updated instructions misalignment on page 4 of instructions screen
+- Updated code to allow player to move system added tiles during god mode
+- Updated row behaviour to remove all empty rows at the end of god mode
+- Fixed small bug where system was always spawning consonants in single letters (now random again)
+- Created Scrolling + Fade floating text animation component
+
 May 5 2025
 - Added mute button to pause menu
 - Built simple framework for carousel UI
