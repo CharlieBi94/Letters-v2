@@ -15,7 +15,7 @@ public class PlayAreaController : MonoBehaviour
     [SerializeField]
     private RectTransform parent;
 
-    public Action<string> AnswerSubmitted;
+    public Action<string, Vector2> AnswerSubmitted;
 
     private List<RowController> rows;
     private Dictionary<Tile, RowController> tilesDict;
@@ -73,8 +73,9 @@ public class PlayAreaController : MonoBehaviour
     private void OnAnswerSubmit(RowController row, string word)
     {
         row.gameObject.GetComponent<AnswerInputHandler>().AnswerSubmitted -= OnAnswerSubmit;
+        Debug.Log(row.GetComponent<RectTransform>().localPosition);
+        AnswerSubmitted?.Invoke(word, row.GetComponent<RectTransform>().localPosition);
         RemoveRow(row);
-        AnswerSubmitted?.Invoke(word);
     }
 
     private void RemoveRow(RowController row)

@@ -11,6 +11,8 @@ public class FloatingText : MonoBehaviour
     AnimationCurve movementCurve;
     [SerializeField]
     AnimationCurve fadeCurve;
+    [SerializeField]
+    RectTransform textRect;
     RectTransform rect;
     Coroutine animationCoroutine;
     // Start is called before the first frame update
@@ -18,18 +20,10 @@ public class FloatingText : MonoBehaviour
     {
         tmp.gameObject.SetActive(false);
         rect = GetComponent<RectTransform>();
-        
-    }
-    private void Update()
-    {
-        // For testing
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            PlayText("words", Color.green, Vector3.zero);
-        }
     }
     public void PlayText(string text, Color textColor, Vector3 position)
     {
+        if (animationCoroutine != null) StopCoroutine(animationCoroutine);
         tmp.text = text;
         tmp.color = textColor;
         animationCoroutine = StartCoroutine(FloatAtPos(position));
@@ -37,7 +31,8 @@ public class FloatingText : MonoBehaviour
 
     private IEnumerator FloatAtPos(Vector3 initialPos)
     {
-        tmp.gameObject.transform.position = initialPos;
+        rect.localPosition = initialPos;
+        textRect.localPosition = Vector3.zero;
         tmp.gameObject.SetActive(true);
         Color color = tmp.color;
         float elpasedTime = 0f;
@@ -45,8 +40,8 @@ public class FloatingText : MonoBehaviour
         {
             float deltaY = movementCurve.Evaluate(elpasedTime) * 10;
             float alpha = fadeCurve.Evaluate(elpasedTime);
-            Debug.Log($"Movement delta: {deltaY} | Alpha: {alpha}");
-            rect.localPosition = new Vector3(initialPos.x, initialPos.y + deltaY, initialPos.z);
+            //Debug.Log($"Movement delta: {deltaY} | Alpha: {alpha}");
+            textRect.localPosition = new Vector3(0, deltaY, 0);
             tmp.color = new Color(color.r, color.g, color.b, alpha);
             elpasedTime += Time.deltaTime;
             yield return null;

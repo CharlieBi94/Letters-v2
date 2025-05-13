@@ -14,7 +14,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseRowSpawnInterval: 12
   baseLevelupInterval: 6
-  doubleLetterSpawn: 8
+  doubleLetterCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.06
+      inSlope: 0.9399999
+      outSlope: 0.9399999
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.04338754
+      value: 0.10078428
+      inSlope: 1.5456696
+      outSlope: 1.5456696
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.8
+      inSlope: 0.7309289
+      outSlope: 0.7309289
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   incorrectTimePenalty: 3
   scoreMultiplier: 1
   scorePenalty: 0.5
@@ -30,4 +62,4 @@ MonoBehaviour:
   godModeUpgradeChance: 10
   minGodModeAnsCount: 6
   wildCardUpgradeChance: 5
-  minWildCardAnsCount: 0
+  minSoloSysTileCount: 0

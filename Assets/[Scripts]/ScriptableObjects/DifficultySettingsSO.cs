@@ -10,8 +10,8 @@ public class DifficultySettingsSO : ScriptableObject
     public int baseRowSpawnInterval;
     [Tooltip("Base number of 'moves' before player gets an upgrade.")]
     public int baseLevelupInterval;
-    [Tooltip("The number of correct answers before double letters start to spawn.")]
-    public int doubleLetterSpawn;
+    [Tooltip("The number of correct answers before double letters start to spawn. the 'time' (x-axis) stands for number of correct answers / 100 and the 'value' (y-axis) is the chance of double spawn between 0-1")]
+    public AnimationCurve doubleLetterCurve;
     [Tooltip("Reduce the timer by this amount when submitting an incorrect word.")]
     public int incorrectTimePenalty;
     [Tooltip("Multiply the word length with this number to calculate score reward.")]
@@ -27,6 +27,7 @@ public class DifficultySettingsSO : ScriptableObject
     public int minute;
     [Tooltip("Amount of seconds player starts with.")]
     public float second;
+
     [Header("God Mode")]
     [Tooltip("Number of seconds per count-down.")]
     public float countdownAnimationDuration;
@@ -34,6 +35,7 @@ public class DifficultySettingsSO : ScriptableObject
     public int countdownNumber;
     [Tooltip("The total amount of seconds god mode lasts.")]
     public float godModeDuration;
+
     [Header("Powerup Spawn Rate")]
     [Tooltip("% chance of getting a middle letter upgrade.")]
     public int middleUpgradeChance;

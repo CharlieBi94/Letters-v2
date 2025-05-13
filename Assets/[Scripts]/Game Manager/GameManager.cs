@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 
 public class GameManager : Singleton<GameManager>
 {
@@ -22,6 +22,10 @@ public class GameManager : Singleton<GameManager>
     private AudioClip gameOverClip;
     [SerializeField]
     private SimpleAnimator animator;
+    [SerializeField]
+    private FloatingText floatingScoreText;
+    [SerializeField]
+    private FloatingText floatingTimeText;
     public Action<string, bool> SpawnNewRow;
     public Action BeginLevelup;
     private int playerMovesCount = 0;
@@ -84,8 +88,9 @@ public class GameManager : Singleton<GameManager>
         string spawn = string.Empty;
         List<char> used = new();
         spawn += LetterUtility.GenerateLetter();
-
-        if (correctWordsSubmitted < difficultySetting.doubleLetterSpawn) return spawn;
+        float chanceSpawn = difficultySetting.doubleLetterCurve.Evaluate(Mathf.Clamp(correctWordsSubmitted, 0, 100)/100);
+        float roll = UnityEngine.Random.Range(0f, 1f);
+        if (roll > chanceSpawn) return spawn;
 
         if (LetterUtility.IsVowel(spawn[0]))
         {
@@ -149,7 +154,7 @@ public class GameManager : Singleton<GameManager>
         return nextLetter;
     }
 
-    public void OnAnswerSubmitted(string word)
+    public void OnAnswerSubmitted(string word, Vector2 rowPos)
     {
         if (SpellChecker.SpellCheck(word))
         {
@@ -160,15 +165,18 @@ public class GameManager : Singleton<GameManager>
                 scoreValue *= difficultySetting.scorePenalty;
                 timeValue *= difficultySetting.timePenalty;
             }
+            //floatingTimeText.PlayText($"{timeValue}", Color.green, rowPos);
             ScoreData.Instance.ChangeScore(scoreValue * difficultySetting.scoreMultiplier);
             timerData.AddTime(0, timeValue * difficultySetting.timeMultiplier);
             WordBank.Instance.AddWord(word);
             // for difficulty, we only count words correctly submitted.
             correctWordsSubmitted++;
+            floatingScoreText.PlayText($"+{timeValue}s", Color.green, rowPos);
         }
         else
         {
             timerData.RemoveTime(difficultySetting.incorrectTimePenalty);
+            floatingScoreText.PlayText($"+{difficultySetting.incorrectTimePenalty}s", Color.red, rowPos);
         }
         // Check if play area has no rows, if not spawn one immediately
         // Check for count of one, because we call this before destroying the the row the player submitted

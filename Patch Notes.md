@@ -1,4 +1,8 @@
 Patch Notes
+May 13 2025
+- Hooked up the fading text to timer changes when submitting answers
+- Added curve for spawning double letters as correct answers increase
+
 May 12 2025
 - Updated instructions misalignment on page 4 of instructions screen
 - Updated code to allow player to move system added tiles during god mode
