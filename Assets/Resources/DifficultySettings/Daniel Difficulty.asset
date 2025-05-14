@@ -62,4 +62,4 @@ MonoBehaviour:
   godModeUpgradeChance: 10
   minGodModeAnsCount: 6
   wildCardUpgradeChance: 5
-  minSoloSysTileCount: 0
+  minSoloSysTileCount: 3

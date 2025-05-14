@@ -13,6 +13,8 @@ public class OptionsWindow : MonoBehaviour
     OptionsGenerator confirmGenerator;
     int optionsNumber = 3;
     [SerializeField]
+    PlayAreaController playArea;
+    [SerializeField]
     AudioClip windowOpeningAudio;
     private DifficultySettingsSO difficultySettings;
 
@@ -52,8 +54,9 @@ public class OptionsWindow : MonoBehaviour
         // God mode can only appear once as an option
         bool godModeUpgraded = false;
 
-        // Wildcard can only appear once
-        bool wildCardUpgraded = false;
+        // Wildcard can only appear once and only if there is over a certain amount of valid rows
+        bool wildCardUpgraded = playArea.GetSysTileOnlyRows().Count >= difficultySettings.minSoloSysTileCount ? false : true;
+
 
         // Setup inventory to ensure that we are not giving player a letter they already have
         List<char> used = InventoryManager.Instance.GetLetterContents();

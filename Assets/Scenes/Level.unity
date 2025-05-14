@@ -1306,6 +1306,7 @@ MonoBehaviour:
   confirmWindow: {fileID: 15850939}
   swapGenerator: {fileID: 1286562158}
   confirmGenerator: {fileID: 15850940}
+  playArea: {fileID: 0}
   windowOpeningAudio: {fileID: 8300000, guid: 67463f2bb0bc16843a274771ec3a44c3, type: 3}
 --- !u!1 &391172941
 GameObject:
@@ -7647,7 +7648,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3490758862599470193, guid: 243515891800d2049950584b7c0626f2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 118.3
+      value: -170
       objectReference: {fileID: 0}
     - target: {fileID: 3490758862599470193, guid: 243515891800d2049950584b7c0626f2, type: 3}
       propertyPath: m_AnchoredPosition.y
