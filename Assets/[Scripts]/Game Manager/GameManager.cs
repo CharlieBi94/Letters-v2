@@ -101,9 +101,7 @@ public class GameManager : Singleton<GameManager>
             // double consonant spawn protection
             spawn += LetterUtility.GenerateUniqueVowel(used);
         }
-
         return spawn;
-
     }
 
     private void OnTimeUp()
