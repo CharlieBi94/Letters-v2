@@ -93,6 +93,7 @@ public class TimerData : MonoBehaviour
             }
         }
         second -= sec;
+        TimeChanged?.Invoke();
     }
 
     public bool IsTimeUp()

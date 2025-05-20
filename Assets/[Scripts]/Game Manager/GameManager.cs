@@ -23,8 +23,6 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private SimpleAnimator animator;
     [SerializeField]
-    private FloatingText floatingScoreText;
-    [SerializeField]
     private FloatingText floatingTimeText;
     public Action<string, bool> SpawnNewRow;
     public Action BeginLevelup;
@@ -169,12 +167,12 @@ public class GameManager : Singleton<GameManager>
             WordBank.Instance.AddWord(word);
             // for difficulty, we only count words correctly submitted.
             correctWordsSubmitted++;
-            floatingScoreText.PlayText($"+{timeValue}s", Color.green, rowPos);
+            floatingTimeText.PlayText($"+{timeValue}s", Color.green, rowPos);
         }
         else
         {
             timerData.RemoveTime(difficultySetting.incorrectTimePenalty);
-            floatingScoreText.PlayText($"+{difficultySetting.incorrectTimePenalty}s", Color.red, rowPos);
+            floatingTimeText.PlayText($"-{difficultySetting.incorrectTimePenalty}s", Color.red, rowPos);
         }
         // Check if play area has no rows, if not spawn one immediately
         // Check for count of one, because we call this before destroying the the row the player submitted
@@ -312,6 +310,7 @@ public class GameManager : Singleton<GameManager>
 
     public void RestartGame()
     {
+        
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         //TrySetGameState(GameState.IN_PLAY);
         //timerData.StartTimer(minute, second);

@@ -13,15 +13,6 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
     [SerializeField]
     RectTransform mainUI;
 
-    [SerializeField]
-    Animator animator;
-
-    [SerializeField]
-    Vector2 leftOffset;
-
-    [SerializeField]
-    Vector2 rightOffset;
-
     // Events
     public Action<RowController, bool> LetterAdded;
 
@@ -216,32 +207,6 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
                 {
                     LetterAdded(parentRow, true);
                 }
-                // Calculate position:
-                Vector2 tilePos = tile.GetComponent<RectTransform>().position;
-                // Figure out if tile position is left or right of the screen
-                if(tilePos.x < 0)
-                {
-                    Vector3 scale = animator.transform.localScale;
-                    if(scale.x > 0)
-                    {
-                        scale.x *= -1;
-                    }
-                    animator.transform.localScale = scale;
-                    animator.transform.position = tilePos + leftOffset;
-                }
-                else
-                {
-                    Vector3 scale = animator.transform.localScale;
-                    if (scale.x < 0)
-                    {
-                        scale.x *= -1;
-                    }
-                    animator.transform.localScale = scale;
-                    animator.transform.position = tilePos + rightOffset;
-                }
-
-                //Play Animation                
-                animator.Play("CatSlap", -1, 0f);
                 
 
             }

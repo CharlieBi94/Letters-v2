@@ -14,6 +14,12 @@ public class PlayAreaController : MonoBehaviour
     public int MAX_ROWS;    
     [SerializeField]
     private RectTransform parent;
+    [SerializeField]
+    Animator animator;
+    [SerializeField]
+    Vector2 leftOffset;
+    [SerializeField]
+    Vector2 rightOffset;
 
     public Action<string, Vector2> AnswerSubmitted;
 
@@ -45,11 +51,43 @@ public class PlayAreaController : MonoBehaviour
         RowController row = SpawnRow();
         RectTransform parent = row.gameObject.GetComponent<RectTransform>();
         row.gameObject.GetComponent<ConstantResizer>().GrowAnimation();
+        bool hasAnimated = false;
         for(int i = 0; i < s.Length; i++)
         {
             Tile t = row.AddLetter(-1, s[i], playerAdded);
             tilesDict.Add(t, row);
-        }        
+            if (!hasAnimated)
+            {
+                // Calculate position:
+                Vector2 tilePos = t.GetComponent<RectTransform>().position;
+                // Figure out if tile position is left or right of the screen
+                if (tilePos.x < 0)
+                {
+                    Vector3 scale = animator.transform.localScale;
+                    if (scale.x > 0)
+                    {
+                        scale.x *= -1;
+                    }
+                    animator.transform.localScale = scale;
+                    animator.transform.position = tilePos + leftOffset;
+                }
+                else
+                {
+                    Vector3 scale = animator.transform.localScale;
+                    if (scale.x < 0)
+                    {
+                        scale.x *= -1;
+                    }
+                    animator.transform.localScale = scale;
+                    animator.transform.position = tilePos + rightOffset;
+                }
+
+                //Play Animation                
+                animator.Play("CatSlap", -1, 0f);
+
+                hasAnimated = true;
+            }
+        }
         row.gameObject.name += count;
         count++;
     }
@@ -107,7 +145,6 @@ public class PlayAreaController : MonoBehaviour
             {
                 ansInput.AnswerSubmitted -= OnAnswerSubmit;
             }
-
         }
     }
 
@@ -120,7 +157,6 @@ public class PlayAreaController : MonoBehaviour
             {
                 Destroy(row.gameObject);
             }
-            
         }
         rows.Clear();
         tilesDict.Clear();

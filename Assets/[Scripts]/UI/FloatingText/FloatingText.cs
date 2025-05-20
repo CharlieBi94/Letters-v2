@@ -13,6 +13,8 @@ public class FloatingText : MonoBehaviour
     AnimationCurve fadeCurve;
     [SerializeField]
     RectTransform textRect;
+    [SerializeField]
+    float yOffset;
     RectTransform rect;
     Coroutine animationCoroutine;
     // Start is called before the first frame update
@@ -41,7 +43,7 @@ public class FloatingText : MonoBehaviour
             float deltaY = movementCurve.Evaluate(elpasedTime) * 10;
             float alpha = fadeCurve.Evaluate(elpasedTime);
             //Debug.Log($"Movement delta: {deltaY} | Alpha: {alpha}");
-            textRect.localPosition = new Vector3(0, deltaY, 0);
+            textRect.localPosition = new Vector3(0, deltaY + yOffset, 0);
             tmp.color = new Color(color.r, color.g, color.b, alpha);
             elpasedTime += Time.deltaTime;
             yield return null;

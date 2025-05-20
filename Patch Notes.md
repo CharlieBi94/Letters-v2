@@ -1,4 +1,10 @@
 Patch Notes
+May 19 2025
+- Moved the god mode effect behind the timer and score text
+- Fixed offset of floating text so it appears more close to the center of the row
+- Fixed issue with timer data not updating during god mode
+- Changed the cat the animation to occcur for system added tiles
+
 May 13 2025
 - Hooked up the fading text to timer changes when submitting answers
 - Added curve for spawning double letters as correct answers increase

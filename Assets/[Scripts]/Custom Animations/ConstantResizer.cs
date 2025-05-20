@@ -51,7 +51,7 @@ public class ConstantResizer : MonoBehaviour
         float scaleY = rect.localScale.y;
         while (multiplier < 1)
         {
-            multiplier = Mathf.Min(1f, multiplier + stepSize * 0.016f);
+            multiplier = Mathf.Min(1f, multiplier + stepSize * 0.03f);
             rect.localScale = new Vector3(scaleX * multiplier, scaleY * multiplier, 1f);
             LayoutRebuilder.ForceRebuildLayoutImmediate(rect.parent as RectTransform);
             yield return new WaitForSeconds(0.016f);
