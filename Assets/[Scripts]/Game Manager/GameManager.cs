@@ -34,12 +34,13 @@ public class GameManager : Singleton<GameManager>
     public enum GameState { PAUSED, IN_PLAY, LEVEL_UP, LOST, GOD_MODE }
     public GameState CurrentState { get; private set; } = GameState.IN_PLAY;
     private string nextLetter;
-    public int correctWordsSubmitted;
+    public int CorrectWordsSubmitted { get; private set; }
+    public int LevelupCount { get; private set; }
     DifficultySettingsSO difficultySetting;
     private void Start()
     {
         difficultySetting = DifficultyManager.Instance.difficultySettings;
-        correctWordsSubmitted = 0;
+        CorrectWordsSubmitted = 0;
         if (!SpellChecker.IsInitialized())
         {
             Debug.Log("SpellChecker is not initialized");
@@ -62,7 +63,7 @@ public class GameManager : Singleton<GameManager>
                 godEffect.SetActive(false);
             }
         }
-        rowSpawnTimer.StartTimer(0, difficultySetting.baseRowSpawnInterval);
+        rowSpawnTimer.StartTimer(0, difficultySetting.rowSpawnInterval.Evaluate(CorrectWordsSubmitted/100f));
         rowSpawnTimer.TimeUp += OnRowSpawnTimerUp;
         rowSpawnTimer.TimeChanged += OnRowTimeChanged;
     }
@@ -71,13 +72,13 @@ public class GameManager : Singleton<GameManager>
     {
         float second = rowSpawnTimer.second;
         second += 60f * rowSpawnTimer.minute;
-        float percent = 1f - (second / difficultySetting.baseRowSpawnInterval);
+        float percent = 1f - (second / difficultySetting.rowSpawnInterval.Evaluate(CorrectWordsSubmitted / 100f));
         TimeToNextRowSpawn?.Invoke(percent);
     }
 
     private void OnRowSpawnTimerUp()
     {
-        rowSpawnTimer.StartTimer(0, difficultySetting.baseRowSpawnInterval);
+        rowSpawnTimer.StartTimer(0, difficultySetting.rowSpawnInterval.Evaluate(CorrectWordsSubmitted/100f));
         SpawnNextLetter();
     }
 
@@ -86,7 +87,7 @@ public class GameManager : Singleton<GameManager>
         string spawn = string.Empty;
         List<char> used = new();
         spawn += LetterUtility.GenerateLetter();
-        float chanceSpawn = difficultySetting.doubleLetterCurve.Evaluate(Mathf.Clamp(correctWordsSubmitted, 0, 100)/100);
+        float chanceSpawn = difficultySetting.doubleLetterCurve.Evaluate(Mathf.Clamp(CorrectWordsSubmitted, 0, 100)/100);
         float roll = UnityEngine.Random.Range(0f, 1f);
         if (roll > chanceSpawn) return spawn;
 
@@ -120,9 +121,10 @@ public class GameManager : Singleton<GameManager>
     {
         if (CurrentState == GameState.GOD_MODE) return;
         playerMovesCount++;
-        LevelupMovesChanged?.Invoke(playerMovesCount, difficultySetting.baseLevelupInterval);
+        int newLevelupCount = (int)Mathf.Round(difficultySetting.baseLevelupInterval.Evaluate(LevelupCount / 100f));
+        LevelupMovesChanged?.Invoke(playerMovesCount, newLevelupCount);
         
-        if (playerMovesCount % difficultySetting.baseLevelupInterval == 0)
+        if (playerMovesCount % newLevelupCount == 0)
         {
             BeginLevelup?.Invoke();
             TrySetGameState(GameState.LEVEL_UP);
@@ -135,7 +137,7 @@ public class GameManager : Singleton<GameManager>
         SpawnNewRow?.Invoke(nextLetter, false);
         nextLetter = GenerateNextSubstring();
         NextLetterChanged?.Invoke(nextLetter);
-        rowSpawnTimer.StartTimer(0, difficultySetting.baseRowSpawnInterval);
+        rowSpawnTimer.StartTimer(0, difficultySetting.rowSpawnInterval.Evaluate(CorrectWordsSubmitted / 100f));
         if (CurrentState == GameState.GOD_MODE) rowSpawnTimer.PauseTimer();
         TimeToNextRowSpawn?.Invoke(0);
     }
@@ -156,17 +158,17 @@ public class GameManager : Singleton<GameManager>
         {
             float scoreValue = word.Length;
             float timeValue = word.Length;
-            if (WordBank.Instance.Contains(word))
+            int wordCount = WordBank.Instance.GetWordCount(word);
+            if (wordCount > 0)
             {
-                scoreValue *= difficultySetting.scorePenalty;
-                timeValue *= difficultySetting.timePenalty;
+                scoreValue *= difficultySetting.scorePenalty.Evaluate(wordCount / 100f);
+                timeValue *= difficultySetting.timePenalty.Evaluate(wordCount / 100f);
             }
-            //floatingTimeText.PlayText($"{timeValue}", Color.green, rowPos);
             ScoreData.Instance.ChangeScore(scoreValue * difficultySetting.scoreMultiplier);
             timerData.AddTime(0, timeValue * difficultySetting.timeMultiplier);
             WordBank.Instance.AddWord(word);
             // for difficulty, we only count words correctly submitted.
-            correctWordsSubmitted++;
+            CorrectWordsSubmitted++;
             floatingTimeText.PlayText($"+{timeValue}s", Color.green, rowPos);
         }
         else
@@ -317,10 +319,5 @@ public class GameManager : Singleton<GameManager>
         //List<char> startingLetters = new() { LetterUtility.GenerateLetter(), LetterUtility.GenerateLetter() };
         //playArea.Restart(startingLetters);
         //playerMovesCount = 0;
-    }
-
-    public int CalculateNextInterval(int x)
-    {
-        return Mathf.Clamp((int)(-0.25f * x + difficultySetting.baseRowSpawnInterval), 2, int.MaxValue);
     }
 }

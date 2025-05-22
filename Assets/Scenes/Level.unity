@@ -1029,7 +1029,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9364abbf0875d19408b4036f3822493a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficultySettings: {fileID: 11400000, guid: 50b3eddb31c335b43a99d3c899ea2b34, type: 2}
+  difficultySettings: {fileID: 11400000, guid: cf295a2717ea04508b7dae1d114a07d7, type: 2}
 --- !u!1 &362169247
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,7 @@
 Patch Notes
+May 22 2025
+- Updated some variables in the difficulty settings into curves for easier scaling
+
 May 19 2025
 - Moved the god mode effect behind the timer and score text
 - Fixed offset of floating text so it appears more close to the center of the row

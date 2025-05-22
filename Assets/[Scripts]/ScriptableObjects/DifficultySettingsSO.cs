@@ -6,22 +6,22 @@ using UnityEngine;
 public class DifficultySettingsSO : ScriptableObject
 {
     [Header("General")]
-    [Tooltip("Base number of seconds before spawning a new row.")]
-    public int baseRowSpawnInterval;
-    [Tooltip("Base number of 'moves' before player gets an upgrade.")]
-    public int baseLevelupInterval;
+    [Tooltip("Number of seconds before spawning a new row per number of correct answers submitted / 100.")]
+    public AnimationCurve rowSpawnInterval;
+    [Tooltip("Base number of 'moves' before player gets an upgrade per number of levelups already achieved/100.")]
+    public AnimationCurve baseLevelupInterval;
     [Tooltip("The number of correct answers before double letters start to spawn. the 'time' (x-axis) stands for number of correct answers / 100 and the 'value' (y-axis) is the chance of double spawn between 0-1")]
     public AnimationCurve doubleLetterCurve;
     [Tooltip("Reduce the timer by this amount when submitting an incorrect word.")]
     public int incorrectTimePenalty;
     [Tooltip("Multiply the word length with this number to calculate score reward.")]
     public float scoreMultiplier;
-    [Tooltip("Multiply the score with this multiplier when submitting duplicate words.")]
-    public float scorePenalty;
+    [Tooltip("Multiply the score gained with this (penalty) multiplier when submitting duplicate words per times duplicate word has been submitted / 100.")]
+    public AnimationCurve scorePenalty;
     [Tooltip("Multiply the word length with this number to calculate time reward.")]
     public float timeMultiplier;
-    [Tooltip("Multiply the time with this multiplier when submitting duplicate words.")]
-    public float timePenalty;
+    [Tooltip("Multiply the time gained with this (penalty) multiplier when submitting duplicate words per times duplciate word has been submitted / 100.")]
+    public AnimationCurve timePenalty;
     [Header("Play Time")]
     [Tooltip("Amount of minutes player starts with.")]
     public int minute;
