@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.XR;
 
 /// <summary>
 /// Class used for checking the spelling of words.
@@ -36,6 +38,7 @@ public class SpellChecker
             string s = new(arr);
             words.Add(s.ToLower());  // Store as lowercase for case-insensitive checking
         }
+        
     }
 
     public static bool IsInitialized() { return words.Count != 0; }

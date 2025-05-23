@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -57,7 +58,11 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
         if(collider != null)
         {
             targetRow = collider.gameObject.GetComponentInParent<RowController>();
-
+            if (!targetRow.CanAdd())
+            {
+                PlaceAtMouse();
+                return;
+            }
             // Check to see if we care about placing things between tiles in the row
             if(canPlaceMiddle)
             {
@@ -75,6 +80,11 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
             {
                 // Regardless of where we are going to position it, we need to get the parent rect
                 RectTransform rowRect = targetRow.gameObject.GetComponent<RectTransform>();
+                if (!targetRow.CanAdd())
+                {
+                    PlaceAtMouse();
+                    return;
+                }
                 // Check to see if mouse is left or right of the center of the row (parent)
                 if (IsLeft(rowRect))
                 {

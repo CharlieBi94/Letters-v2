@@ -5088,7 +5088,6 @@ MonoBehaviour:
   gameOverClip: {fileID: 8300000, guid: 6d44fb052fdf03c49abc3c6694dd63bf, type: 3}
   animator: {fileID: 975070939}
   floatingTimeText: {fileID: 1169058967}
-  correctWordsSubmitted: 0
 --- !u!114 &1322059916
 MonoBehaviour:
   m_ObjectHideFlags: 0

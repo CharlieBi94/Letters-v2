@@ -17,6 +17,8 @@ public class RowController : MonoBehaviour, IUICollider
     RectTransform tilesContainer;
     string word;
     public event Action SizeChanged;
+    [SerializeField]
+    private int maxTileCount;
     RectTransform rect;
     private void Start()
     {
@@ -59,7 +61,14 @@ public class RowController : MonoBehaviour, IUICollider
         tileObj.transform.SetSiblingIndex(position);
         tile.gameObject.GetComponent<LayoutElement>().ignoreLayout = false;
         tile.StartSpawnAnimation();
+        tiles.Add(tile);
         return tile;
+    }
+
+    public bool CanAdd()
+    {
+        if (tiles.Count > maxTileCount) return false;
+        return true;
     }
 
     private void OnLetterAdded(RowController row, bool countMoves)
@@ -134,11 +143,5 @@ public class RowController : MonoBehaviour, IUICollider
             if(t != tile) ans++;
         }
         return ans;
-    }
-
-    public int TileCount()
-    {
-        tiles = tilesContainer.GetComponentsInChildren<Tile>().ToList();
-        return tiles.Count;
     }
 }

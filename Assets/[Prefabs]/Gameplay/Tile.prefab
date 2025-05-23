@@ -260,8 +260,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 30
-  m_MinHeight: 30
+  m_MinWidth: 20
+  m_MinHeight: 20
   m_PreferredWidth: 55
   m_PreferredHeight: 55
   m_FlexibleWidth: -1
@@ -296,7 +296,6 @@ MonoBehaviour:
   backgroundImg: {fileID: 68362218584817093}
   playerAdded: {r: 0.9622642, g: 0.9114276, b: 0.6127626, a: 0.2}
   systemAdded: {r: 0.96470594, g: 0.68235296, b: 0.65882355, a: 0.6509804}
-  stepSize: 0.01
   animationTime: 0.2
 --- !u!114 &-1922587309286656454
 MonoBehaviour:

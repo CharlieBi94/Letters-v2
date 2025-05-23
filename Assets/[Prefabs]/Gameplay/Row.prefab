@@ -161,6 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilesContainer: {fileID: 1820923551137826729}
+  maxTileCount: 12
 --- !u!114 &1632681025124479849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,8 +442,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
+    m_Left: 10
+    m_Right: 10
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
