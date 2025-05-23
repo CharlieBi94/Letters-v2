@@ -30,7 +30,7 @@ public class SwapInputHandler : Singleton<SwapInputHandler>
     {
         Restart();
         // Subscribe to swap event from GameManager
-        GameManager.Instance.BeginLevelup += OnBeginLevelup;
+        //GameManager.Instance.BeginLevelup += ShowPowerPack;
     }
 
     /// <summary>
@@ -62,7 +62,7 @@ public class SwapInputHandler : Singleton<SwapInputHandler>
         visibilityButton.localScale = new Vector3(visibilityButton.localScale.x, visibilityButton.localScale.y * -1, visibilityButton.localScale.z);
     }
 
-    private void OnBeginLevelup()
+    public void ShowPowerPack()
     {
         // first show UI
         if (!optionsScreen.activeSelf) 

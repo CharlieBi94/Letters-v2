@@ -1,4 +1,8 @@
 Patch Notes
+May 23 2025
+- Changed levelup options into powerpacks and triggered by placeholder button
+- Updated rows to have a maximum tile limit (this eliminates 6519 words from being formed)
+
 May 22 2025
 - Updated some variables in the difficulty settings into curves for easier scaling
 

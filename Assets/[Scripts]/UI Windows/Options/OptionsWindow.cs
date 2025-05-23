@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static GameManager;
 
 public class OptionsWindow : MonoBehaviour
 {
@@ -45,6 +46,7 @@ public class OptionsWindow : MonoBehaviour
     public void ShowNewOptions()
     {
         HideWindows();
+        if (GameManager.Instance.TrySetGameState(GameState.LEVEL_UP) != GameState.LEVEL_UP) return;
         optionsWindow.SetActive(true);
         SoundController.Instance.PlaySoundEffect(windowOpeningAudio);
         // Check to make sure if we should offer the middle placement upgrade

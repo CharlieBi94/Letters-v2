@@ -127,7 +127,7 @@ public class GameManager : Singleton<GameManager>
         if (playerMovesCount % newLevelupCount == 0)
         {
             BeginLevelup?.Invoke();
-            TrySetGameState(GameState.LEVEL_UP);
+            LevelupCount++;
         }
     }
 

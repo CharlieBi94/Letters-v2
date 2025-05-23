@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ProgressDisplay : MonoBehaviour
 {
@@ -8,6 +9,10 @@ public class ProgressDisplay : MonoBehaviour
     private float value;
     [SerializeField]
     RectTransform progressBar;
+    [SerializeField]
+    Image progressBarImg;
+    [SerializeField]
+    PowerupPack powerPack;
 
     Queue<float> progressQueue = new();
     private float startingValue;
@@ -25,6 +30,7 @@ public class ProgressDisplay : MonoBehaviour
     {
         if (animate)
         {
+            progressBarImg.color = (powerPack.PowerPackCount == 0) ? Color.blue : Color.red;
             value = Mathf.Lerp(startingValue, targetValue, t);
             progressBar.localScale = new Vector3( value,
                 progressBar.localScale.y,
