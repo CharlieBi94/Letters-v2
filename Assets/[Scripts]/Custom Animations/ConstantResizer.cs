@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,7 +27,6 @@ public class ConstantResizer : MonoBehaviour
     {
         // Calculate the step-size for the animation
         float multiplier = 1.0f;
-        float scaleX = rect.localScale.x;
         float scaleY = rect.localScale.y;
         while (multiplier > 0)
         {

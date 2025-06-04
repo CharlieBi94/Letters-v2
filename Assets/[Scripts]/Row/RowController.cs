@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,11 +18,9 @@ public class RowController : MonoBehaviour, IUICollider
     public event Action SizeChanged;
     [SerializeField]
     private int maxTileCount;
-    RectTransform rect;
     private void Start()
     {
         word = string.Empty;
-        rect = GetComponent<RectTransform>();
         InventoryInputHandler.Instance.LetterAdded += OnLetterAdded;
     }
 

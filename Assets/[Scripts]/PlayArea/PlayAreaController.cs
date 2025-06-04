@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// Manages the rows in the play area.
@@ -11,30 +10,25 @@ using UnityEngine.UI;
 public class PlayAreaController : MonoBehaviour
 {
     [SerializeField]
-    public int MAX_ROWS;    
+    private RectTransform rowContainer;
     [SerializeField]
-    private RectTransform parent;
-    [SerializeField]
-    Animator animator;
-    [SerializeField]
-    Vector2 leftOffset;
-    [SerializeField]
-    Vector2 rightOffset;
-
+    private CatAnimator catAnim;
+    public readonly int MAX_ROWS = 6;
     public Action<string, Vector2> AnswerSubmitted;
-
     private List<RowController> rows;
     private Dictionary<Tile, RowController> tilesDict;
+    public Action<Tile> TileSpawned;
 
     // Count is used for nameing gameobjects for debugging
     private int count = 0;
     private void Start()
     {
-        rows = parent.GetComponentsInChildren<RowController>().ToList();
+
+        rows = rowContainer.GetComponentsInChildren<RowController>().ToList();
         tilesDict = new();
         StartCoroutine(Initialize());
     }
-
+    
     IEnumerator Initialize()
     {
         yield return new WaitUntil(() => GameManager.Instance);
@@ -49,52 +43,21 @@ public class PlayAreaController : MonoBehaviour
     public void OnSpawnNewRow(string s, bool playerAdded)
     {
         RowController row = SpawnRow();
-        RectTransform parent = row.gameObject.GetComponent<RectTransform>();
         row.gameObject.GetComponent<ConstantResizer>().GrowAnimation();
-        bool hasAnimated = false;
         for(int i = 0; i < s.Length; i++)
         {
             Tile t = row.AddLetter(-1, s[i], playerAdded);
             tilesDict.Add(t, row);
-            if (!hasAnimated)
-            {
-                // Calculate position:
-                Vector2 tilePos = t.GetComponent<RectTransform>().position;
-                // Figure out if tile position is left or right of the screen
-                if (tilePos.x < 0)
-                {
-                    Vector3 scale = animator.transform.localScale;
-                    if (scale.x > 0)
-                    {
-                        scale.x *= -1;
-                    }
-                    animator.transform.localScale = scale;
-                    animator.transform.position = tilePos + leftOffset;
-                }
-                else
-                {
-                    Vector3 scale = animator.transform.localScale;
-                    if (scale.x < 0)
-                    {
-                        scale.x *= -1;
-                    }
-                    animator.transform.localScale = scale;
-                    animator.transform.position = tilePos + rightOffset;
-                }
-
-                //Play Animation                
-                animator.Play("CatSlap", -1, 0f);
-
-                hasAnimated = true;
-            }
+            if (i == 0) TileSpawned?.Invoke(t);
         }
         row.gameObject.name += count;
         count++;
     }
 
+
     private RowController SpawnRow()
     {
-        var rowObj = RowFactory.Instance.SpawnRow(parent);
+        var rowObj = RowFactory.Instance.SpawnRow(rowContainer);
         RowController row = rowObj.GetComponent<RowController>();
         AnswerInputHandler ansHandler = row.gameObject.GetComponent<AnswerInputHandler>();
         ansHandler.AnswerSubmitted += OnAnswerSubmit;
@@ -111,9 +74,13 @@ public class PlayAreaController : MonoBehaviour
     private void OnAnswerSubmit(RowController row, string word)
     {
         row.gameObject.GetComponent<AnswerInputHandler>().AnswerSubmitted -= OnAnswerSubmit;
-        Debug.Log(row.GetComponent<RectTransform>().localPosition);
-        AnswerSubmitted?.Invoke(word, row.GetComponent<RectTransform>().localPosition);
+        Vector2 pos = row.GetComponent<RectTransform>().localPosition;
         RemoveRow(row);
+        AnswerSubmitted?.Invoke(word, pos);
+        if(rows.Count == 0)
+        {
+            GameManager.Instance.SpawnNextLetter();
+        }
     }
 
     private void RemoveRow(RowController row)
@@ -138,12 +105,17 @@ public class PlayAreaController : MonoBehaviour
 
     private void ClearContents()
     {
-        foreach (var row in rows)
+        while(rows.Count >= 1)
         {
-            if (row == null) return;
-            if (row.gameObject.TryGetComponent<AnswerInputHandler>(out var ansInput))
+            RowController row = rows[0];
+            rows.Remove(row);
+            if(row != null)
             {
-                ansInput.AnswerSubmitted -= OnAnswerSubmit;
+                if (row.gameObject.TryGetComponent<AnswerInputHandler>(out var ansInput))
+                {
+                    ansInput.AnswerSubmitted -= OnAnswerSubmit;
+                }
+                Destroy(row.gameObject);
             }
         }
     }
@@ -151,14 +123,6 @@ public class PlayAreaController : MonoBehaviour
     public void Restart(List<string> startingSubstring)
     {
         ClearContents();
-        foreach(var row in rows)
-        {
-            if (row)
-            {
-                Destroy(row.gameObject);
-            }
-        }
-        rows.Clear();
         tilesDict.Clear();
         foreach(string s in startingSubstring)
         {
@@ -209,7 +173,7 @@ public class PlayAreaController : MonoBehaviour
     }
 
     /// <summary>
-    /// This 
+    /// This returns only the tiles added by the system.
     /// </summary>
     /// <returns></returns>
     public List<RowController> GetSysTileOnlyRows()
@@ -242,6 +206,7 @@ public class PlayAreaController : MonoBehaviour
         {
             if (row.GetAllTiles().Count == 0) emptyRows.Add(row);
         }
+
         foreach(var row in emptyRows)
         {
             RemoveRow(row);

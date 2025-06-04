@@ -176,12 +176,6 @@ public class GameManager : Singleton<GameManager>
             timerData.RemoveTime(difficultySetting.incorrectTimePenalty);
             floatingTimeText.PlayText($"-{difficultySetting.incorrectTimePenalty}s", Color.red, rowPos);
         }
-        // Check if play area has no rows, if not spawn one immediately
-        // Check for count of one, because we call this before destroying the the row the player submitted
-        if (playArea.RowCount() == 0)
-        {
-            SpawnNewRow?.Invoke(GetNextLetter(), false);
-        }
         // For now submitting an answer won't count as a move
         //IncrementMoves();
     }

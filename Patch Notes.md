@@ -1,4 +1,11 @@
 Patch Notes
+June 04 2025
+- Seperated CatSlap animation from PlayAreaController
+- Fixed the inventory slot to be more aligned with the sticker (still a little stretched)
+- Fixed bug where new row not being generated when field is empty
+- reworked powerpacks to work with any number (instead of just 1)
+- Reworked the options screen to be more modular
+
 May 23 2025
 - Changed levelup options into powerpacks and triggered by placeholder button
 - Updated rows to have a maximum tile limit (this eliminates 6519 words from being formed)

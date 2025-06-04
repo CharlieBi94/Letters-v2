@@ -315,8 +315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec084c7c595be334c9923c307252cd9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MAX_ROWS: 6
-  parent: {fileID: 4214462395208747097}
+  rowContainer: {fileID: 4214462395208747097}
 --- !u!114 &363032374757869593
 MonoBehaviour:
   m_ObjectHideFlags: 0

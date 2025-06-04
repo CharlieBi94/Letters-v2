@@ -12,8 +12,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d9d6c94b51aa94f9f8b9887741c092, type: 3}
   m_Name: Test Difficulty
   m_EditorClassIdentifier: 
-  baseRowSpawnInterval: 12
-  baseLevelupInterval: 6
+  rowSpawnInterval:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 12
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 12
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  baseLevelupInterval:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 4
+      inSlope: 6
+      outSlope: 6
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 10
+      inSlope: 6
+      outSlope: 6
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   doubleLetterCurve:
     serializedVersion: 2
     m_Curve:
@@ -58,9 +104,19 @@ MonoBehaviour:
     m_RotationOrder: 4
   incorrectTimePenalty: 3
   scoreMultiplier: 1
-  scorePenalty: 0.5
+  scorePenalty:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   timeMultiplier: 2.5
-  timePenalty: 0.5
+  timePenalty:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   minute: 2
   second: 0
   countdownAnimationDuration: 0.4

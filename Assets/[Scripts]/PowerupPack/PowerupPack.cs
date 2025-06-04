@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using TMPro;
 using UnityEngine;
 using static GameManager;
@@ -8,7 +7,9 @@ public class PowerupPack : MonoBehaviour
 {
     [SerializeField]
     TextMeshProUGUI tmp;
+    public int MAX_POWERPACK_COUNT;
     public int PowerPackCount { get; private set; }
+    public Action<int> PowerPackCountChanged;
 
     // Start is called before the first frame update
     void Start()
@@ -20,15 +21,17 @@ public class PowerupPack : MonoBehaviour
 
     private void OnLevelUp()
     {
-        if (PowerPackCount > 0) return;
+        if (PowerPackCount >= MAX_POWERPACK_COUNT) return;
         PowerPackCount++;
         tmp.text = PowerPackCount.ToString();
+        PowerPackCountChanged?.Invoke(PowerPackCount);
     }
 
     public void OpenPowerPack()
     {
         if (GameManager.Instance.TrySetGameState(GameState.PAUSED) != GameState.PAUSED) return;
         PowerPackCount--;
+        PowerPackCountChanged?.Invoke(PowerPackCount);
         tmp.text = PowerPackCount.ToString();
         SwapInputHandler.Instance.ShowPowerPack();
     }

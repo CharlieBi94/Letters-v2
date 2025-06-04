@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,13 +25,18 @@ public class ProgressDisplay : MonoBehaviour
     {
         value = Mathf.Clamp01(value);
         progressBar.localScale = new Vector3(value, progressBar.localScale.y, progressBar.localScale.z);
+        powerPack.PowerPackCountChanged += OnPowerPackCountChanged;
+    }
+
+    private void OnPowerPackCountChanged(int count)
+    {
+        progressBarImg.color = (count < powerPack.MAX_POWERPACK_COUNT) ? Color.blue : Color.red;
     }
 
     private void Update()
     {
         if (animate)
         {
-            progressBarImg.color = (powerPack.PowerPackCount == 0) ? Color.blue : Color.red;
             value = Mathf.Lerp(startingValue, targetValue, t);
             progressBar.localScale = new Vector3( value,
                 progressBar.localScale.y,
@@ -58,6 +64,7 @@ public class ProgressDisplay : MonoBehaviour
         }
     }
 
+
     public void SetValue(float amount)
     {
         if(animate == true)
@@ -72,6 +79,7 @@ public class ProgressDisplay : MonoBehaviour
         }
         
     }
+
 
     public float GetValue()
     {
