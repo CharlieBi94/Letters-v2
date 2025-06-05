@@ -1,4 +1,4 @@
-# Stick it Kitty game
+# Stick it Kitty
 You can find the playable version of this game here: https://charliebi94.github.io/Letters-WebGL-Build/
 
 ## Overview
