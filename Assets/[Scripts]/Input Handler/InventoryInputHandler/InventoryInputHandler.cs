@@ -1,6 +1,6 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 /// <summary>
@@ -133,28 +133,43 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
 
     private void PlaceAtMouse()
     {
-
+        Vector2 mousePos = Vector2.zero;
+        if(Touchscreen.current != null)
+        {
+            mousePos = Touchscreen.current.primaryTouch.position.ReadValue();
+        }
+        else
+        {
+            mousePos = Mouse.current.position.ReadValue();
+        }
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvas,
-            Input.mousePosition,
-            Camera.main,
-            out Vector2 pos);
+        canvas,
+        mousePos,
+        Camera.main,
+        out Vector2 pos);
 
         // if setting it to the canvas, ignore the layout and display its preferred size
         
         tile.transform.SetParent(canvas, false);
         layout.ignoreLayout = true;
         tile.transform.position = canvas.TransformPoint(pos);
-        tileRect.sizeDelta = new Vector2(layout.preferredWidth, layout.preferredHeight);    
+        tileRect.sizeDelta = new Vector2(layout.preferredWidth, layout.preferredHeight);
     }
 
     private Collider2D GetNearestCollider(int layerMask)
     {
         // Get mouse position in screen space
-        Vector3 mouseScreenPosition = Input.mousePosition;
-
+        Vector2 mousePos = Vector2.zero;
+        if (Touchscreen.current != null)
+        {
+            mousePos = Touchscreen.current.primaryTouch.position.ReadValue();
+        }
+        else
+        {
+            mousePos = Mouse.current.position.ReadValue();
+        }
         // Convert mouse screen position to a ray from the camera
-        Ray ray = mainCamera.ScreenPointToRay(mouseScreenPosition);
+        Ray ray = mainCamera.ScreenPointToRay(mousePos);
 
         // Visualize the ray in the Scene view
         Debug.DrawRay(ray.origin, ray.direction * 100, Color.green);
@@ -176,7 +191,7 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
         //Get the mouse position and convert it to position of parent rect
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             rectParent,
-            Input.mousePosition,
+            Mouse.current.position.ReadValue(),
             Camera.main,
             out Vector2 mousePos);
         return mousePos.x < 0;
