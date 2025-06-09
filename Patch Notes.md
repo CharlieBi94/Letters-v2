@@ -1,4 +1,8 @@
 Patch Notes
+June 09 2025
+- Updated to the new input system
+- Reworked code to work on mobile and WebGL
+
 June 04 2025
 - Seperated CatSlap animation from PlayAreaController
 - Fixed the inventory slot to be more aligned with the sticker (still a little stretched)

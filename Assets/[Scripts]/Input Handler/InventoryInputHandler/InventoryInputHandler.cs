@@ -188,10 +188,21 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
     private bool IsLeft(RectTransform target)
     {
         RectTransform rectParent = target.GetComponentInParent<RectTransform>();
+        Vector2 currPos = Vector2.zero;
+        if (Touchscreen.current != null)
+        {
+            currPos = Touchscreen.current.primaryTouch.position.ReadValue();
+        }
+        else
+        {
+            currPos = Mouse.current.position.ReadValue();
+        }
+
+        
         //Get the mouse position and convert it to position of parent rect
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             rectParent,
-            Mouse.current.position.ReadValue(),
+            currPos,
             Camera.main,
             out Vector2 mousePos);
         return mousePos.x < 0;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(OptionData))]
@@ -61,7 +62,16 @@ public class OptionBehaviour : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     public void OnEndDrag(PointerEventData eventData)
     {
         if (!draggedObject) return;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector2 currPos = Vector2.zero;
+        if (Touchscreen.current != null)
+        {
+            currPos = Touchscreen.current.primaryTouch.position.ReadValue();
+        }
+        else
+        {
+            currPos = Mouse.current.position.ReadValue();
+        }
+        Ray ray = Camera.main.ScreenPointToRay(currPos);
 
         // Perform the raycast
         RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, 1<<8);
@@ -96,7 +106,16 @@ public class OptionBehaviour : MonoBehaviour, IBeginDragHandler, IEndDragHandler
         LayoutElement layout = draggedObject.GetComponent<LayoutElement>();
         draggedObject.transform.SetParent(uiCanvas, false);
         layout.ignoreLayout = true;
-        draggedObject.transform.position = Input.mousePosition;
+        Vector2 currPos = Vector2.zero;
+        if (Touchscreen.current != null)
+        {
+            currPos = Touchscreen.current.primaryTouch.position.ReadValue();
+        }
+        else
+        {
+            currPos = Mouse.current.position.ReadValue();
+        }
+        draggedObject.transform.position = currPos;
         //tileRect.sizeDelta = new Vector2(layout.preferredWidth, layout.preferredHeight);
     }
 
