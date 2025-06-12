@@ -29,8 +29,8 @@ public class PowerupPack : MonoBehaviour
 
     public void OpenPowerPack()
     {
-        if (GameManager.Instance.TrySetGameState(GameState.PAUSED) != GameState.PAUSED) return;
         if (PowerPackCount <= 0) return;
+        if (GameManager.Instance.TrySetGameState(GameState.PAUSED) != GameState.PAUSED) return;
         PowerPackCount--;
         PowerPackCountChanged?.Invoke(PowerPackCount);
         tmp.text = PowerPackCount.ToString();
