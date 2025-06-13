@@ -5,6 +5,8 @@ using static GameManager;
 
 public class PowerupPack : MonoBehaviour
 {
+    public static int PowerPackUsed = 0;
+
     [SerializeField]
     TextMeshProUGUI tmp;
     public int MAX_POWERPACK_COUNT;
@@ -32,6 +34,7 @@ public class PowerupPack : MonoBehaviour
         if (PowerPackCount <= 0) return;
         if (GameManager.Instance.TrySetGameState(GameState.PAUSED) != GameState.PAUSED) return;
         PowerPackCount--;
+        PowerPackUsed++;
         PowerPackCountChanged?.Invoke(PowerPackCount);
         tmp.text = PowerPackCount.ToString();
         SwapInputHandler.Instance.ShowPowerPack();

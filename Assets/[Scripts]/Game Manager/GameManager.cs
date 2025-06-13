@@ -36,6 +36,8 @@ public class GameManager : Singleton<GameManager>
     private string nextLetter;
     public int CorrectWordsSubmitted { get; private set; }
     public int LevelupCount { get; private set; }
+    public int IncorrectWords { get; private set; }
+
     DifficultySettingsSO difficultySetting;
     private void Start()
     {
@@ -175,6 +177,7 @@ public class GameManager : Singleton<GameManager>
         {
             timerData.RemoveTime(difficultySetting.incorrectTimePenalty);
             floatingTimeText.PlayText($"-{difficultySetting.incorrectTimePenalty}s", Color.red, rowPos);
+            IncorrectWords++;
         }
         // For now submitting an answer won't count as a move
         //IncrementMoves();

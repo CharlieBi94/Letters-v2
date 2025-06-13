@@ -9,6 +9,12 @@ public class GameOverWindow : MonoBehaviour
     // Just the gameobject parent of all visible UI elements
     [SerializeField]
     GameObject visibleContainer;
+    [SerializeField]
+    TextMeshProUGUI tmpCorrectCount;
+    [SerializeField]
+    TextMeshProUGUI tmpIncorrectCount;
+    [SerializeField]
+    TextMeshProUGUI tmpPowerpack;
 
     // For temp debugging
     [SerializeField]
@@ -30,6 +36,9 @@ public class GameOverWindow : MonoBehaviour
         {
             visibleContainer.SetActive(true);
             tmp.text = GameManager.Instance.GameOverCause();
+            tmpCorrectCount.text = $"Correct Count: {GameManager.Instance.CorrectWordsSubmitted}";
+            tmpIncorrectCount.text = $"Incorrect Count: {GameManager.Instance.IncorrectWords}";
+            tmpPowerpack.text = $"Powerups Used: {PowerupPack.PowerPackUsed}";
         }
         else
         {
