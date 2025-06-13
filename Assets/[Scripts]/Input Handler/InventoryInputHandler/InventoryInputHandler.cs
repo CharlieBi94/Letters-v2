@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -133,15 +134,7 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
 
     private void PlaceAtMouse()
     {
-        Vector2 mousePos = Vector2.zero;
-        if(Touchscreen.current != null)
-        {
-            mousePos = Touchscreen.current.primaryTouch.position.ReadValue();
-        }
-        else
-        {
-            mousePos = Mouse.current.position.ReadValue();
-        }
+        Vector2 mousePos = GetMousePosition();
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
         canvas,
         mousePos,
@@ -159,15 +152,7 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
     private Collider2D GetNearestCollider(int layerMask)
     {
         // Get mouse position in screen space
-        Vector2 mousePos = Vector2.zero;
-        if (Touchscreen.current != null)
-        {
-            mousePos = Touchscreen.current.primaryTouch.position.ReadValue();
-        }
-        else
-        {
-            mousePos = Mouse.current.position.ReadValue();
-        }
+        Vector2 mousePos = GetMousePosition();
         // Convert mouse screen position to a ray from the camera
         Ray ray = mainCamera.ScreenPointToRay(mousePos);
 
@@ -188,17 +173,8 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
     private bool IsLeft(RectTransform target)
     {
         RectTransform rectParent = target.GetComponentInParent<RectTransform>();
-        Vector2 currPos = Vector2.zero;
-        if (Touchscreen.current != null)
-        {
-            currPos = Touchscreen.current.primaryTouch.position.ReadValue();
-        }
-        else
-        {
-            currPos = Mouse.current.position.ReadValue();
-        }
+        Vector2 currPos = GetMousePosition();
 
-        
         //Get the mouse position and convert it to position of parent rect
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             rectParent,
@@ -322,6 +298,23 @@ public class InventoryInputHandler : Singleton<InventoryInputHandler>
     public void HandleTilePointerUp()
     {
         CancelInventoryBehaviour();
+    }
+
+    private Vector2 GetMousePosition()
+    {
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        {
+            return Touchscreen.current.primaryTouch.position.ReadValue();
+        }
+        else if (Mouse.current != null)
+        {
+            return Mouse.current.position.ReadValue();
+        }
+        else
+        {
+            Debug.LogWarning("No valid input source found.");
+            return Vector2.zero;
+        }
     }
 
 }
