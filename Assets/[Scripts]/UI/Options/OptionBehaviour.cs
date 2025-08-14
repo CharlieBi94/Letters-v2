@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(OptionData))]
@@ -62,15 +60,7 @@ public class OptionBehaviour : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     public void OnEndDrag(PointerEventData eventData)
     {
         if (!draggedObject) return;
-        Vector2 currPos = Vector2.zero;
-        if (Touchscreen.current != null)
-        {
-            currPos = Touchscreen.current.primaryTouch.position.ReadValue();
-        }
-        else
-        {
-            currPos = Mouse.current.position.ReadValue();
-        }
+        Vector2 currPos = eventData.position;
         Ray ray = Camera.main.ScreenPointToRay(currPos);
 
         // Perform the raycast
@@ -106,17 +96,8 @@ public class OptionBehaviour : MonoBehaviour, IBeginDragHandler, IEndDragHandler
         LayoutElement layout = draggedObject.GetComponent<LayoutElement>();
         draggedObject.transform.SetParent(uiCanvas, false);
         layout.ignoreLayout = true;
-        Vector2 currPos = Vector2.zero;
-        if (Touchscreen.current != null)
-        {
-            currPos = Touchscreen.current.primaryTouch.position.ReadValue();
-        }
-        else
-        {
-            currPos = Mouse.current.position.ReadValue();
-        }
-        draggedObject.transform.position = currPos;
-        //tileRect.sizeDelta = new Vector2(layout.preferredWidth, layout.preferredHeight);
+
+        draggedObject.transform.position = eventData.position;
     }
 
     private bool IsDraggable()

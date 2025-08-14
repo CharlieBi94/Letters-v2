@@ -1188,6 +1188,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2038712213592139280, guid: 14ad64a067f983249a5a33a9f6d4e79d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d7a6749331a71c34cb740fb9e8047a3b, type: 3}
     - target: {fileID: 3286174969615612154, guid: 14ad64a067f983249a5a33a9f6d4e79d, type: 3}
       propertyPath: m_Name
       value: Carousel Item (Instructions) 2
