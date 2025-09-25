@@ -89,17 +89,16 @@ public class GameManager : Singleton<GameManager>
         string spawn = string.Empty;
         List<char> used = new();
         spawn += LetterUtility.GenerateLetter();
-        float chanceSpawn = difficultySetting.doubleLetterCurve.Evaluate(Mathf.Clamp(CorrectWordsSubmitted, 0, 100)/100);
+        float chanceSpawn = difficultySetting.doubleLetterCurve.Evaluate(Mathf.Clamp01(CorrectWordsSubmitted/100f));
         float roll = UnityEngine.Random.Range(0f, 1f);
         if (roll > chanceSpawn) return spawn;
-
+        // double consonant spawn protection
         if (LetterUtility.IsVowel(spawn[0]))
         {
             spawn += LetterUtility.GenerateLetter();
         }
         else
         {
-            // double consonant spawn protection
             spawn += LetterUtility.GenerateUniqueVowel(used);
         }
         return spawn;
@@ -316,5 +315,10 @@ public class GameManager : Singleton<GameManager>
         //List<char> startingLetters = new() { LetterUtility.GenerateLetter(), LetterUtility.GenerateLetter() };
         //playArea.Restart(startingLetters);
         //playerMovesCount = 0;
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }

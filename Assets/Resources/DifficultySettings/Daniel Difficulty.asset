@@ -66,39 +66,30 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.06
-      value: 0
-      inSlope: -0.0020016788
-      outSlope: -0.0020016788
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 1
-      outWeight: 0.06975747
-    - serializedVersion: 3
-      time: 0.46404895
-      value: 0.593822
-      inSlope: 0.81130064
-      outSlope: 0.81130064
-      tangentMode: 0
+      value: 0.12
+      inSlope: Infinity
+      outSlope: 1.1999999
+      tangentMode: 7
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1.0041809
-      value: 0.80221254
-      inSlope: -0.018465284
-      outSlope: -0.018465284
-      tangentMode: 0
+      time: 1
+      value: 0.12
+      inSlope: Infinity
+      outSlope: 0
+      tangentMode: 7
       weightedMode: 0
-      inWeight: 0.15179908
-      outWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -167,7 +158,7 @@ MonoBehaviour:
   countdownAnimationDuration: 0.4
   countdownNumber: 4
   godModeDuration: 17.6
-  middleUpgradeChance: 15
+  middleUpgradeChance: 20
   minMiddleAnsCount: 10
   godModeUpgradeChance: 10
   minGodModeAnsCount: 6

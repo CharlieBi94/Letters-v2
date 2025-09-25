@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static GameManager;
 
 public class PowerupPack : MonoBehaviour
@@ -9,15 +11,20 @@ public class PowerupPack : MonoBehaviour
 
     [SerializeField]
     TextMeshProUGUI tmp;
+    [SerializeField]
+    CatAnimator catAnimator;
     public int MAX_POWERPACK_COUNT;
     public int PowerPackCount { get; private set; }
     public Action<int> PowerPackCountChanged;
+    public Action PowerPackEarned;
+    [SerializeField]
+    List<Image> powerPackImages;
 
     // Start is called before the first frame update
     void Start()
     {
         PowerPackCount = 0;
-        tmp.text = PowerPackCount.ToString();
+        UpdateDisplay();
         GameManager.Instance.BeginLevelup += OnLevelUp;
     }
 
@@ -25,8 +32,16 @@ public class PowerupPack : MonoBehaviour
     {
         if (PowerPackCount >= MAX_POWERPACK_COUNT) return;
         PowerPackCount++;
-        tmp.text = PowerPackCount.ToString();
+        PowerPackEarned?.Invoke();
         PowerPackCountChanged?.Invoke(PowerPackCount);
+        catAnimator.CatSlapComplete += OnAnimComplete;
+        
+    }
+
+    private void OnAnimComplete()
+    {
+        UpdateDisplay();
+        catAnimator.CatSlapComplete -= OnAnimComplete;
     }
 
     public void OpenPowerPack()
@@ -36,7 +51,23 @@ public class PowerupPack : MonoBehaviour
         PowerPackCount--;
         PowerPackUsed++;
         PowerPackCountChanged?.Invoke(PowerPackCount);
-        tmp.text = PowerPackCount.ToString();
+        UpdateDisplay();
         SwapInputHandler.Instance.ShowPowerPack();
+    }
+
+    private void UpdateDisplay()
+    {
+        tmp.text = PowerPackCount.ToString();
+        for (int i = 0; i < powerPackImages.Count; i++)
+        {
+            if(i >= PowerPackCount)
+            {
+                powerPackImages[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                powerPackImages[i].gameObject.SetActive(true);
+            }
+        }
     }
 }

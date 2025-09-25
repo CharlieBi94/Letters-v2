@@ -8,6 +8,8 @@ public class CatAnimator : MonoBehaviour
     [SerializeField]
     private PlayAreaController playController;
     [SerializeField]
+    private PowerupPack powerupPackController;
+    [SerializeField]
     private Animator animator;
     [SerializeField]
     private Vector2 leftOffset;
@@ -18,12 +20,20 @@ public class CatAnimator : MonoBehaviour
     void Start()
     {
         playController.TileSpawned += OnTileSpawned;
+        powerupPackController.PowerPackEarned += OnPackGained;
     }
 
     private void OnTileSpawned(Tile tile)
     {
         if (tile.playerAdded) return;
         PlayAnimation(tile.GetComponent<RectTransform>().position);
+    }
+
+    private void OnPackGained()
+    {
+        Vector2 targetPos = powerupPackController.gameObject.GetComponent<RectTransform>().position;
+        Vector2 customPos = new Vector2(targetPos.x+0.9f, targetPos.y+1.7f);
+        PlayAnimation(customPos);
     }
 
     private void PlayAnimation(Vector2 targetPosition)

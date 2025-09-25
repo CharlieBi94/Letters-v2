@@ -13,7 +13,9 @@ public class SwapInputHandler : Singleton<SwapInputHandler>
     GameObject swapUI;
 
     [SerializeField]
-    RectTransform visibilityButton;
+    GameObject minimizeButton;
+    [SerializeField]
+    GameObject maximizeButton;
 
     [SerializeField]
     WildcardOptions wildCardSelectScreen;
@@ -41,25 +43,27 @@ public class SwapInputHandler : Singleton<SwapInputHandler>
         // Only do this if swapping has been initiated
         if (swapUI.activeSelf)
         {
-            HideUI();
+            MinimizeSwapScreen();
         }
         else
         {
-            ShowUI();
+            MaximizeSwapScreen();
         }
     }
 
-    private void HideUI()
+    private void MinimizeSwapScreen()
     {
         swapUI.SetActive(false);
         // hacky way to flip the icon 
-        visibilityButton.localScale = new Vector3(visibilityButton.localScale.x, visibilityButton.localScale.y * -1, visibilityButton.localScale.z);
+        minimizeButton.SetActive(false);
+        maximizeButton.SetActive(true);
     }
 
-    private void ShowUI()
+    private void MaximizeSwapScreen()
     {
         swapUI.SetActive(true);
-        visibilityButton.localScale = new Vector3(visibilityButton.localScale.x, visibilityButton.localScale.y * -1, visibilityButton.localScale.z);
+        minimizeButton.SetActive(true);
+        maximizeButton.SetActive(false);
     }
 
     public void ShowPowerPack()
