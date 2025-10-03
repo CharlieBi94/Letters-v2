@@ -59,9 +59,9 @@ public class SoundController : Singleton<SoundController>
         audioSource.Play();
     }
 
-    public void PlaySoundEffect(AudioClip clip)
+    public void PlaySoundEffect(AudioClip clip, float volumeScale = 1f)
     {
-        audioSource.PlayOneShot(clip);
+        audioSource.PlayOneShot(clip, volumeScale);
     }
 
     public AudioClip GetCurrentClip()

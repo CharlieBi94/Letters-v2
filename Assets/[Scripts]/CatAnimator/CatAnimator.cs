@@ -15,6 +15,8 @@ public class CatAnimator : MonoBehaviour
     private Vector2 leftOffset;
     [SerializeField]
     private Vector2 rightOffset;
+    [SerializeField]
+    AudioClip catSlapAudio;
 
     // Start is called before the first frame update
     void Start()
@@ -66,5 +68,6 @@ public class CatAnimator : MonoBehaviour
     public void AnimationReachedTarget()
     {
         CatSlapComplete?.Invoke();
+        SoundController.Instance.PlaySoundEffect(catSlapAudio, 3f);
     }
 }

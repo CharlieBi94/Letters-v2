@@ -14,6 +14,8 @@ public class PauseToggle : MonoBehaviour, IUICollider, IPointerClickHandler
     Image buttonIconImg;
     [SerializeField]
     Window pauseWindow;
+    [SerializeField]
+    AudioClip clickAudio;
 
     public event Action SizeChanged;
 
@@ -27,6 +29,7 @@ public class PauseToggle : MonoBehaviour, IUICollider, IPointerClickHandler
 
     public void TogglePause()
     {
+        SoundController.Instance.PlaySoundEffect(clickAudio);
         if(GameManager.Instance.CurrentState == GameManager.GameState.IN_PLAY)
         {
             GameManager.Instance.TrySetGameState(GameManager.GameState.PAUSED);

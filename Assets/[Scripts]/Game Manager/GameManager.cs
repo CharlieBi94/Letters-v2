@@ -24,6 +24,10 @@ public class GameManager : Singleton<GameManager>
     private SimpleAnimator animator;
     [SerializeField]
     private FloatingText floatingTimeText;
+    [SerializeField]
+    private AudioClip correctAnswerAudio;
+    [SerializeField]
+    private AudioClip incorrectAnswerAudio;
     public Action<string, bool> SpawnNewRow;
     public Action BeginLevelup;
     private int playerMovesCount = 0;
@@ -171,12 +175,14 @@ public class GameManager : Singleton<GameManager>
             // for difficulty, we only count words correctly submitted.
             CorrectWordsSubmitted++;
             floatingTimeText.PlayText($"+{timeValue}s", Color.green, rowPos);
+            SoundController.Instance.PlaySoundEffect(correctAnswerAudio);
         }
         else
         {
             timerData.RemoveTime(difficultySetting.incorrectTimePenalty);
             floatingTimeText.PlayText($"-{difficultySetting.incorrectTimePenalty}s", Color.red, rowPos);
             IncorrectWords++;
+            SoundController.Instance.PlaySoundEffect(incorrectAnswerAudio);
         }
         // For now submitting an answer won't count as a move
         //IncrementMoves();
@@ -321,4 +327,6 @@ public class GameManager : Singleton<GameManager>
     {
         SceneManager.LoadScene(0);
     }
+
+
 }

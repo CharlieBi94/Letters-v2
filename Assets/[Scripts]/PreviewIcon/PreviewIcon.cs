@@ -11,6 +11,8 @@ public class PreviewIcon : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     GameObject iconContainer;
     [SerializeField]
+    AudioClip clickSound;
+    [SerializeField]
     Image[] icons;
     
 
@@ -64,5 +66,6 @@ public class PreviewIcon : MonoBehaviour, IPointerClickHandler
     {
         GameManager.Instance.SpawnNextLetter();
         OnSpawnTimeChanged(0);
+        SoundController.Instance.PlaySoundEffect(clickSound);
     }
 }

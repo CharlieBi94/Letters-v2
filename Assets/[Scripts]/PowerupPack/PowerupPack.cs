@@ -8,7 +8,8 @@ using static GameManager;
 public class PowerupPack : MonoBehaviour
 {
     public static int PowerPackUsed = 0;
-
+    [SerializeField]
+    AudioClip openPackAudio;
     [SerializeField]
     TextMeshProUGUI tmp;
     [SerializeField]
@@ -19,6 +20,8 @@ public class PowerupPack : MonoBehaviour
     public Action PowerPackEarned;
     [SerializeField]
     List<Image> powerPackImages;
+    
+
 
     // Start is called before the first frame update
     void Start()
@@ -48,11 +51,13 @@ public class PowerupPack : MonoBehaviour
     {
         if (PowerPackCount <= 0) return;
         if (GameManager.Instance.TrySetGameState(GameState.PAUSED) != GameState.PAUSED) return;
+        SoundController.Instance.PlaySoundEffect(openPackAudio);
         PowerPackCount--;
         PowerPackUsed++;
         PowerPackCountChanged?.Invoke(PowerPackCount);
         UpdateDisplay();
         SwapInputHandler.Instance.ShowPowerPack();
+        
     }
 
     private void UpdateDisplay()
