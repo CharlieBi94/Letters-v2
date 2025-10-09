@@ -1408,7 +1408,7 @@ PrefabInstance:
     - target: {fileID: 2038712213592139280, guid: 14ad64a067f983249a5a33a9f6d4e79d, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 3fe9121420069d64e83c2ee758d8ac61, type: 3}
+      objectReference: {fileID: 21300000, guid: d9d5ffa91864e8b4184ddea36fe70477, type: 3}
     - target: {fileID: 3286174969615612154, guid: 14ad64a067f983249a5a33a9f6d4e79d, type: 3}
       propertyPath: m_Name
       value: Carousel Item (Instructions) 7
@@ -1922,7 +1922,7 @@ PrefabInstance:
     - target: {fileID: 2038712213592139280, guid: 14ad64a067f983249a5a33a9f6d4e79d, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 67e0d35233fb0034c9806bfb6a4f4c65, type: 3}
+      objectReference: {fileID: 21300000, guid: c92ffa0743b37d24a9665cda76ebd995, type: 3}
     - target: {fileID: 3286174969615612154, guid: 14ad64a067f983249a5a33a9f6d4e79d, type: 3}
       propertyPath: m_Name
       value: Carousel Item (Instructions) 4.5
