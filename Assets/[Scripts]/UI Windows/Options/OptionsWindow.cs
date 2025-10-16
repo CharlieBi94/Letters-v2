@@ -15,8 +15,6 @@ public class OptionsWindow : MonoBehaviour
     int optionsNumber = 3;
     [SerializeField]
     PlayAreaController playArea;
-    [SerializeField]
-    AudioClip windowOpeningAudio;
     private DifficultySettingsSO difficultySettings;
 
     public enum OPTION_TYPE { SWAP, MIDDLE_PLACEMENT, SWAP_CONFIRM, MIDDLE_UPGRADE_CONFIRM, GOD_MODE, WILD_CARD, WILD_CARD_OPTIONS}
@@ -48,7 +46,6 @@ public class OptionsWindow : MonoBehaviour
         HideWindows();
         if (GameManager.Instance.TrySetGameState(GameState.LEVEL_UP) != GameState.LEVEL_UP) return;
         optionsWindow.SetActive(true);
-        SoundController.Instance.PlaySoundEffect(windowOpeningAudio);
         // Check to make sure if we should offer the middle placement upgrade
         bool middleUpgraded = false;
         List<InventorySlot> slot = InventoryManager.Instance.GetUpgradeableLetters();

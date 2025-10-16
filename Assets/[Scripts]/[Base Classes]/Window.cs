@@ -1,15 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class Window : MonoBehaviour
 {
     [SerializeField]
     GameObject window;
-
-    [SerializeField]
-    AudioClip openWindowClip;
 
     [SerializeField]
     float animationTime = 1f;
@@ -22,7 +20,9 @@ public class Window : MonoBehaviour
     float progress = 0f;
 
     RectTransform rect;
-    float originalSize;
+
+    public UnityEvent OnWindowOpen;
+    public UnityEvent OnWindowClose;
 
     private void Start()
     {
@@ -33,10 +33,11 @@ public class Window : MonoBehaviour
     {
         if(window != null & !window.activeInHierarchy)
         {
+            OnWindowOpen?.Invoke();
             window.SetActive(true);
             if (rect == null) rect = window.GetComponent<RectTransform>();
             GrowAnimation();
-            SoundController.Instance.PlaySoundEffect(openWindowClip);
+            
         }
         
     }
@@ -45,12 +46,11 @@ public class Window : MonoBehaviour
     {
         if(window != null && window.activeInHierarchy)
         {
-            SoundController.Instance.PlaySoundEffect(openWindowClip);
+            OnWindowClose?.Invoke();
             window.SetActive(false);
             // Won't work right now because window is hidden before animation is complete
             //ShrinkAnimation();
         }
-        
     }
 
     private void GrowAnimation()

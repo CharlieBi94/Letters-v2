@@ -50,14 +50,14 @@ public class PowerupPack : MonoBehaviour
     public void OpenPowerPack()
     {
         if (PowerPackCount <= 0) return;
+        if (GameManager.Instance.CurrentState != GameState.IN_PLAY) return;
         if (GameManager.Instance.TrySetGameState(GameState.PAUSED) != GameState.PAUSED) return;
-        SoundController.Instance.PlaySoundEffect(openPackAudio);
+        SoundController.Instance.PlaySoundEffect(openPackAudio, 8f);
         PowerPackCount--;
         PowerPackUsed++;
         PowerPackCountChanged?.Invoke(PowerPackCount);
         UpdateDisplay();
         SwapInputHandler.Instance.ShowPowerPack();
-        
     }
 
     private void UpdateDisplay()

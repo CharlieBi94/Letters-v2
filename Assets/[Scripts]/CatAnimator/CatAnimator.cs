@@ -68,6 +68,6 @@ public class CatAnimator : MonoBehaviour
     public void AnimationReachedTarget()
     {
         CatSlapComplete?.Invoke();
-        SoundController.Instance.PlaySoundEffect(catSlapAudio, 3f);
+        SoundController.Instance.PlaySoundEffect(catSlapAudio, 2.5f);
     }
 }
