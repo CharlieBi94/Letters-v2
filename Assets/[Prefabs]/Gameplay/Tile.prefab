@@ -294,7 +294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   letterImg: {fileID: 1470055937927398280}
   backgroundImg: {fileID: 68362218584817093}
-  playerAdded: {r: 0.9622642, g: 0.9114276, b: 0.6127626, a: 0.2}
+  playerAdded: {r: 0.9622642, g: 0.9114276, b: 0.6127626, a: 0}
   systemAdded: {r: 0.96470594, g: 0.68235296, b: 0.65882355, a: 0.6509804}
   animationTime: 0.2
 --- !u!114 &-1922587309286656454

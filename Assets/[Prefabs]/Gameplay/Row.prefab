@@ -245,6 +245,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb88a51d5c5a0744fb55465ff9c8165e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MAX_Y_PERCENT: 0.1
+  MIN_SWIPE_PERCENT: 0.3
   scrollBar: {fileID: 866205628276580041}
 --- !u!1 &4487238196691350778
 GameObject:
